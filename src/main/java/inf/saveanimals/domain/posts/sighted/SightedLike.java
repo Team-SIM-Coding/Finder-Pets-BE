@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 제보 - 관심하트 [테이블]
+ */
 @Getter
 @NoArgsConstructor
 @Entity

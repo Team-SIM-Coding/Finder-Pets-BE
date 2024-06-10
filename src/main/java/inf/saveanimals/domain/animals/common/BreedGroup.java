@@ -6,6 +6,7 @@ import java.util.Arrays;
 import static inf.saveanimals.domain.animals.common.Breed.*;
 
 /**
+ *
  * - 축종(개/고양이/기타), 품종을 그룹으로 묶어서 표현.
  * - 기타, 믹스(견/묘)는 ETC 로 표시해두었다.
   */

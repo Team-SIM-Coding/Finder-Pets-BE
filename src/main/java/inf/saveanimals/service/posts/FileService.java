@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+/**
+ * 구글클라우드(GCS) 파일 업로드 서비스
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -51,7 +54,10 @@ public class FileService {
             Blob blob = storage.create(blobInfo, multipartFile.getInputStream());
         }
 
+
         return imgUrl;
     }
+
+
 
 }

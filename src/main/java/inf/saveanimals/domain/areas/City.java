@@ -2,6 +2,10 @@ package inf.saveanimals.domain.areas;
 
 import lombok.Getter;
 
+/**
+ * 지역구 정보 데이터
+ */
+
 @Getter
 public enum City {
 

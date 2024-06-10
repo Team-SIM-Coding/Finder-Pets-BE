@@ -1,4 +1,4 @@
-package inf.saveanimals.controller;
+package inf.saveanimals.controller.sighted;
 
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.service.UserService;

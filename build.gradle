@@ -75,6 +75,10 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+processResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 bootJar {
-	duplicatesStrategy = 'exclude'
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

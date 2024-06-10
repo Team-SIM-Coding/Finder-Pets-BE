@@ -220,6 +220,7 @@ public enum Breed {
     PERSIAN_CHINCHILLA("페르시안-페르시안 친칠라"),
     HAVANA_BROWN("하바나 브라운"),
     HIGHLAND_FOLD("하이랜드 폴드"),
+    KOREAN_SHORTHAIR("코리안숏헤어"),
     MIXED_CAT_BREED( "믹스묘");
 
 

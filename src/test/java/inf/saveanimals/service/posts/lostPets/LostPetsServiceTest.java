@@ -1,6 +1,7 @@
-package inf.saveanimals.service.posts;
+package inf.saveanimals.service.posts.lostPets;
 
 import inf.saveanimals.domain.animals.common.Breed;
+import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
 import inf.saveanimals.domain.areas.City;
@@ -16,6 +17,7 @@ import inf.saveanimals.request.posts.lost.LostPetsCreate;
 import inf.saveanimals.request.posts.lost.LostPetsEdit;
 import inf.saveanimals.service.posts.lostPets.LostPetsService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,29 +69,33 @@ class LostPetsServiceTest {
                 .email("none1234@gmail.com")
                 .password("1234")
                 .img("/imgpath")
+                .nickname("ningning")
                 .build();
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         LostPetsCreate postCreate = LostPetsCreate.builder()
                 .breed(Breed.AKITA)
+                .breedGroup(BreedGroup.DOG)
                 .gender(Gender.FEMALE)
-                .weight(10)
+                .weight("10살")
                 .color("black")
                 .age("19(년생)")
                 .neuteringStatus(NeuteringStatus.Y)
                 .specialMark("파란색목줄착용, 겁이많음,진드기")
                 .petOwnerTel("123-123")
-                .content("중요")
                 .happenPlace("공주시 우금티터널")
                 .city(City.GONGJU_SI)
                 .districts(Districts.CHUNGCHEONGNAM_CITY)
+                .lostDate(LocalDateTime.now())
+                .latitude("123")
+                .longitude("123")
                 .build();
 
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
 
         // when
-        lostPetsService.write(user.getId(), postCreate, multipartFileList);
+        lostPetsService.write(savedUser.getId(), postCreate, multipartFileList);
 
         //then
         LostPets post = lostPetsRepository.findAll().get(0);
@@ -112,13 +119,12 @@ class LostPetsServiceTest {
         LostPetsCreate postCreate = LostPetsCreate.builder()
                 .breed(Breed.AKITA)
                 .gender(Gender.FEMALE)
-                .weight(10)
+                .weight("10살")
                 .color("black")
                 .age("19(년생)")
                 .neuteringStatus(NeuteringStatus.Y)
                 .specialMark("파란색목줄착용, 겁이많음,진드기")
                 .petOwnerTel("123-123")
-                .content("중요")
                 .happenPlace("공주시 우금티터널")
                 .city(City.GONGJU_SI)
                 .districts(Districts.CHUNGCHEONGNAM_CITY)
@@ -130,17 +136,15 @@ class LostPetsServiceTest {
 
 
         LostPetsEdit postEdit = LostPetsEdit.builder()
-                .content("매우 중요하다.")
+                .specialMark("귀쫑긋")
                 .build();
 
         // when
         lostPetsService.edit(postId, postEdit);
 
         LostPets foundPost = lostPetsService.findById(postId);
-        log.info("post info={}", foundPost.getSpecialMark());
-
         // then
-        assertEquals("매우 중요하다.", foundPost.getContent());
+        assertEquals("귀쫑긋", foundPost.getSpecialMark());
 
     }
 
@@ -159,14 +163,15 @@ class LostPetsServiceTest {
         LostPetsCreate postCreate = LostPetsCreate.builder()
                 .breed(Breed.AKITA)
                 .gender(Gender.FEMALE)
-                .weight(10)
+                .weight("10살")
                 .color("black")
                 .age("19(년생)")
                 .neuteringStatus(NeuteringStatus.Y)
                 .specialMark("파란색목줄착용, 겁이많음,진드기")
                 .petOwnerTel("123-123")
-                .content("중요")
                 .happenPlace("공주시 우금티터널")
+                .city(City.GONGJU_SI)
+                .districts(Districts.CHUNGCHEONGNAM_CITY)
                 .build();
 
 

@@ -7,6 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * 이미지 생성할 때
+ * - 사용은 안함 (구현중 적은것)
+ */
 @Data
 public class PetsImgCreate {
 

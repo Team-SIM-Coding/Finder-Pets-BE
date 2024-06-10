@@ -5,6 +5,9 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 오류 예외 메시지 정의하기
+ */
 @Getter
 public abstract class InfTeamException extends RuntimeException {
 

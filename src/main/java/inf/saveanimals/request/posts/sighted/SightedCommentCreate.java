@@ -4,6 +4,9 @@ import inf.saveanimals.domain.posts.sighted.SightedComments;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 제보_댓글 - 생성 요청 DTO
+ */
 @Getter
 public class SightedCommentCreate {
 

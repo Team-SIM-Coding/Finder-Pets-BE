@@ -19,10 +19,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 실종 - 포스팅 본문 [테이블]
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -37,9 +42,13 @@ public class LostPets {
     private Category category; // 글 카테고리 (실종 / 제보)
 
     @Enumerated(EnumType.STRING)
-    private IsCompleted isCompleted; // 글 상태
+    private IsCompleted isCompleted; // 글 상태 (해결 유무)
+
 
     // --실종동물 등록 시 정보 입력--
+    private String writerNickname; // 작성자 닉네임
+    private String writerProfileImage; // 작성자 프로필
+
     @Enumerated(EnumType.STRING)
     private Breed breed; // 품종
 
@@ -49,7 +58,7 @@ public class LostPets {
     @Enumerated(EnumType.STRING)
     private Gender gender; // 성별
 
-    private float weight; // 몸무게
+    private String weight; // 몸무게
     private String color; //색상
     private String age; // 나이
 
@@ -58,9 +67,7 @@ public class LostPets {
 
     private String specialMark; // 특징
     private String petOwnerTel; // 보호자 연락처
-    private String content; // 포스팅 본문
 
-    private String happenPlace; // 잃어버린 장소
 
     /**
      * 만약, 위치정보를 (시/구)를 받을 경우로 가정하
@@ -71,20 +78,24 @@ public class LostPets {
     @Enumerated(EnumType.STRING)
     private Districts districts; // 구(군)
 
+    private LocalDateTime lostDate; // 실종 날짜
+    private LocalDateTime createdAt; // 작성 시간
+    private String happenPlace; // 잃어버린 장소
+
     // 지도 api 받고 나서?
     private String latitude; //  잃어버린 장소 - 위도
     private String longitude; // 잃어버린 장소 - 경도
-
-    // 이미지
-    @JsonIgnore
-    @OneToMany(mappedBy = "lostPets", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LostImg> lostImgs = new ArrayList<>();
 
     @Column(name = "views", nullable = false)
     private Integer views; //조회수
 
     @Column(name = "total_like", nullable = false)
     private Integer totalLike; // 좋아요 수
+
+    // 이미지
+    @JsonIgnore
+    @OneToMany(mappedBy = "lostPets", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LostImg> lostImgs = new ArrayList<>();
 
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -93,18 +104,20 @@ public class LostPets {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lostPets")
     private List<LostComments> comments = new ArrayList<>();
 
+
     @Builder
-    public LostPets(Breed breed, Gender gender, float weight, String color,
-                    String age, NeuteringStatus neuteringStatus,
-                    String specialMark, String petOwnerTel,
-                    String content, String happenPlace, User user,
-                    City city, Districts districts) {
-        this.category = Category.MISSING;
-        this.isCompleted = IsCompleted.UNRESOLVED;
+    public LostPets(Breed breed, BreedGroup breedGroup, Gender gender, String weight, String color, String age,
+                    NeuteringStatus neuteringStatus, String specialMark, String petOwnerTel,
+                    City city, Districts districts, LocalDateTime lostDate, String happenPlace, String latitude, String longitude, User user) {
         this.views = 0;
         this.totalLike = 0;
+        this.isCompleted = IsCompleted.UNRESOLVED;
+        this.category = Category.MISSING;
+        this.createdAt = LocalDateTime.now();
+        this.writerNickname = user.getNickname();
+        this.writerProfileImage = user.getImg();
         this.breed = breed;
-        this.breedGroup = searchBreedGroup(breed);
+        this.breedGroup = breedGroup;
         this.gender = gender;
         this.weight = weight;
         this.color = color;
@@ -112,16 +125,18 @@ public class LostPets {
         this.neuteringStatus = neuteringStatus;
         this.specialMark = specialMark;
         this.petOwnerTel = petOwnerTel;
-        this.content = content;
-        this.happenPlace = happenPlace;
-        this.user = user;
         this.city = city;
         this.districts = districts;
+        this.lostDate = lostDate;
+        this.happenPlace = happenPlace;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.user = user;
     }
 
     public void update(LostPetsEdit postEdit) {
         this.breed = postEdit.getBreed();
-        this.breedGroup = searchBreedGroup(postEdit.getBreed());
+        this.breedGroup = postEdit.getBreedGroup();
         this.gender = postEdit.getGender();
         this.weight = postEdit.getWeight();
         this.color = postEdit.getColor();
@@ -129,18 +144,27 @@ public class LostPets {
         this.neuteringStatus = postEdit.getNeuteringStatus();
         this.specialMark = postEdit.getSpecialMark();
         this.petOwnerTel = postEdit.getPetOwnerTel();
-        this.content = postEdit.getContent();
         this.happenPlace = postEdit.getHappenPlace();
+        this.lostDate = postEdit.getLostDate();
         this.city = postEdit.getCity();
         this.districts = postEdit.getDistricts();
+        this.lostDate = postEdit.getLostDate();
+        this.longitude = postEdit.getLongitude();
+        this.latitude = postEdit.getLatitude();
     }
+
 
     public LostPetsDetailResponse toMissingPostDetailResponse() {
         return LostPetsDetailResponse.builder()
-                .id(user.getId())
+                .id(id)
                 .category(category)
                 .isCompleted(isCompleted)
+                .writerNickname(writerNickname)
+                .writerProfileImage(writerProfileImage)
+                .lostDate(lostDate)
+                .createdAt(createdAt)
                 .breed(breed)
+                .breedGroup(breedGroup)
                 .gender(gender)
                 .weight(weight)
                 .color(color)
@@ -148,16 +172,14 @@ public class LostPets {
                 .neuteringStatus(neuteringStatus)
                 .specialMark(specialMark)
                 .petOwnerTel(petOwnerTel)
-                .content(content)
+                .city(city)
+                .districts(districts)
                 .happenPlace(happenPlace)
                 .latitude(latitude)
                 .longitude(longitude)
                 .imgPaths(getImgPaths())
                 .views(views)
                 .totalLike(totalLike)
-                .authorNick(user.getNickname())
-                .city(city)
-                .districts(districts)
                 .build();
     }
 
@@ -179,6 +201,12 @@ public class LostPets {
     // 실종된 반려동물을 찾았을 때, 완료 처리하는 로직
     public void finalizeCase() {
         this.isCompleted = IsCompleted.COMPLETION;
+    }
+
+
+    // 조회수
+    public void viewCount() {
+        this.views++;
     }
 
 
@@ -208,5 +236,12 @@ public class LostPets {
 
     }
 
+    private String fetchUserNickname() {
+        return user.getNickname();
+    }
+
+    private String fetchUserProfileImage() {
+        return user.getImg();
+    }
 
 }

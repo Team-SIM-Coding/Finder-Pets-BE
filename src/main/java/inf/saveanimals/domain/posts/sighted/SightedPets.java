@@ -3,6 +3,8 @@ package inf.saveanimals.domain.posts.sighted;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
+import inf.saveanimals.domain.animals.common.Gender;
+import inf.saveanimals.domain.animals.common.NeuteringStatus;
 import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.common.Category;
@@ -23,6 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 제보 - 포스팅 본문 [테이블]
+ */
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -34,104 +40,147 @@ public class SightedPets {
     @Column(name = "sighted_pets_id")
     private Long id;
 
-    private String authorNick; // 작성자 닉네임
-    private String authorImg; // 작성자 프로필
-
     @Enumerated(EnumType.STRING)
     private Category category; // 글 카테고리 (실종 / 제보)
 
     @Enumerated(EnumType.STRING)
-    private IsCompleted isCompleted; // 글 상태
+    private IsCompleted isCompleted; // 글 상태 (해결 유무)
 
-    private LocalDateTime foundDate; // 목격한 날짜
-    private LocalDateTime createdAt; // 작성 시간
-    private String foundPlace; // 발견된 장소
-    private String specialMark; // 상세 설명 (내용 입력칸)
+
+    // --실종동물 등록 시 정보 입력--
+    private String writerNickname; // 작성자 닉네임
+    private String writerProfileImage; // 작성자 프로필
+
+    @Enumerated(EnumType.STRING)
+    private Breed breed; // 품종
+
+    @Enumerated(EnumType.STRING)
+    private BreedGroup breedGroup; // (동물 종류)
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender; // 성별
+
+    private String weight; // 몸무게
+    private String color; //색상
+    private String age; // 나이
+
+    @Enumerated(EnumType.STRING)
+    private NeuteringStatus neuteringStatus; // 중성화 여부
+
+    private String specialMark; // 특징
+
     private String reporterTel; // 제보자 연락처
 
-    // 지도로 받은 정보
-    private String latitude;  // 장소 - 위도
-    private String longitude; // 장소 - 경도
-
+    /**
+     * 만약, 위치정보를 (시/구)를 받을 경우로 가정하
+     */
     @Enumerated(EnumType.STRING)
     private City city;
 
     @Enumerated(EnumType.STRING)
     private Districts districts;
 
-    @Enumerated(EnumType.STRING)
-    private BreedGroup breedGroup; // (동물 종류)
+    private LocalDateTime foundDate; // 목격한 날짜
+    private LocalDateTime createdAt; // 작성 시간
+    private String foundPlace; // 발견된 장소
 
-    @Enumerated(EnumType.STRING)
-    private Breed breed; // 품종
+    // 지도로 받은 정보
+    private String latitude;  // 장소 - 위도
+    private String longitude; // 장소 - 경도
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sightedPets")
-    private List<SightedComments> comments = new ArrayList<>();
 
+    @Column(name = "views", nullable = false)
+    private Integer views; //조회수
+
+    @Column(name = "total_like", nullable = false)
+    private Integer totalLike; // 좋아요 수
 
     // 이미지
     @JsonIgnore
     @OneToMany(mappedBy = "sightedPets", cascade = CascadeType.ALL)
     private List<SightedImg> sightedImgList = new ArrayList<>();
 
-    @Column(name = "views", nullable = false)
-    private Integer views; //조회수
-
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "total_like", nullable = false)
-    private Integer totalLike; // 좋아요 수
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sightedPets")
+    private List<SightedComments> comments = new ArrayList<>();
 
     @Builder
-    public SightedPets(User user, String reporterTel, Breed breed, LocalDateTime foundDate, String foundPlace, String specialMark,
-                       City city, Districts districts) {
-        this.user = user;
-        this.authorNick = user.getNickname();
-        this.authorImg = user.getImg();
-        this.reporterTel = reporterTel;
-        this.breed = breed;
-        this.breedGroup = searchBreedGroup(breed);
-        this.category = Category.SIGHTED;
-        this.isCompleted = IsCompleted.UNRESOLVED;
+    public SightedPets(Breed breed, BreedGroup breedGroup, Gender gender,
+                       String weight, String color, String age, NeuteringStatus neuteringStatus, String specialMark,
+                       String reporterTel, City city, Districts districts, LocalDateTime foundDate, String foundPlace,
+                       String latitude, String longitude, User user) {
         this.views = 0;
         this.totalLike = 0;
+        this.isCompleted = IsCompleted.UNRESOLVED;
+        this.category = Category.MISSING;
         this.createdAt = LocalDateTime.now();
-        this.foundDate = foundDate;
-        this.foundPlace = foundPlace;
+        this.writerNickname = user.getNickname();
+        this.writerProfileImage = user.getImg();
+        this.breed = breed;
+        this.breedGroup = breedGroup;
+        this.gender = gender;
+        this.weight = weight;
+        this.color = color;
+        this.age = age;
+        this.neuteringStatus = neuteringStatus;
         this.specialMark = specialMark;
+        this.reporterTel = reporterTel;
         this.city = city;
         this.districts = districts;
+        this.foundDate = foundDate;
+        this.foundPlace = foundPlace;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.user = user;
     }
 
-    public void update(SightedPetsEdit sightedPetsEdit) {
-        this.breed = sightedPetsEdit.getBreed();
-        this.breedGroup = searchBreedGroup(sightedPetsEdit.getBreed());
-        this.specialMark = sightedPetsEdit.getSpecialMark();
-        this.reporterTel = sightedPetsEdit.getReporterTel();
-        this.foundDate = sightedPetsEdit.getFoundDate();
-        this.foundPlace = sightedPetsEdit.getFoundPlace();
-        this.city = sightedPetsEdit.getCity();
-        this.districts = sightedPetsEdit.getDistricts();
+
+    public void update(SightedPetsEdit postEdit) {
+        this.breed = postEdit.getBreed();
+        this.breedGroup = searchBreedGroup(postEdit.getBreed());
+        this.gender = postEdit.getGender();
+        this.weight = postEdit.getWeight();
+        this.color = postEdit.getColor();
+        this.age = postEdit.getAge();
+        this.neuteringStatus = postEdit.getNeuteringStatus();
+        this.specialMark = postEdit.getSpecialMark();
+        this.reporterTel = postEdit.getReporterTel();
+        this.foundPlace = postEdit.getFoundPlace();
+        this.foundDate = postEdit.getFoundDate();
+        this.city = postEdit.getCity();
+        this.districts = postEdit.getDistricts();
+        this.longitude = postEdit.getLongitude();
+        this.latitude = postEdit.getLatitude();
     }
+
+
 
     public SightedPetsDetailResponse toSightedPetsDetailResponse() {
         return SightedPetsDetailResponse.builder()
                 .id(id)
                 .category(category)
                 .isCompleted(isCompleted)
+                .writerNickname(writerNickname)
+                .writerProfileImage(writerProfileImage)
                 .foundDate(foundDate)
                 .createdAt(createdAt)
-                .foundPlace(foundPlace)
+                .breed(breed)
+                .breedGroup(breedGroup)
+                .gender(gender)
+                .weight(weight)
+                .color(color)
+                .age(age)
+                .neuteringStatus(neuteringStatus)
                 .specialMark(specialMark)
                 .reporterTel(reporterTel)
-                .latitude(latitude)
-                .longitude(longitude)
                 .city(city)
                 .districts(districts)
-                .breedGroup(breedGroup)
-                .breed(breed)
+                .foundPlace(foundPlace)
+                .latitude(latitude)
+                .longitude(longitude)
                 .imgPaths(getImgPaths())
                 .views(views)
                 .totalLike(totalLike)
@@ -184,4 +233,13 @@ public class SightedPets {
         comment.assignToLostPets(this);
         this.comments.add(comment);
     }
+
+    private String fetchUserNickname() {
+        return user.getNickname();
+    }
+
+    private String fetchUserProfileImage() {
+        return user.getImg();
+    }
+
 }

@@ -9,11 +9,16 @@ import inf.saveanimals.exception.UserNotFound;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.posts.CreateImgRequest;
+import inf.saveanimals.request.posts.SearchCondition;
 import inf.saveanimals.request.posts.sighted.SightedPetsCreate;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
+
 import inf.saveanimals.response.posts.sightedPets.SightedPetsDetailResponse;
+import inf.saveanimals.response.posts.sightedPets.SightedPetsThumbnailResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,11 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * 제보-본문 서비스
+ */
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class SightedPostService {
+public class SightedPetsService {
 
     private final SightedPetsRepository sightedPetsRepository;
     private final UserRepository userRepository;
@@ -109,6 +117,18 @@ public class SightedPostService {
      * - 검색조건
      * - 계정
      */
+    // 검색 필터 -> 페이징
+    @Transactional(readOnly = true)
+    public Page<SightedPetsThumbnailResponse> findPosts(SearchCondition condition, Pageable pageable) {
+        return sightedPetsRepository.findAllBySearchCondition(condition, pageable);
+    }
+
+
+    // 계정당 포스트 조회
+    @Transactional(readOnly = true)
+    public Page<SightedPetsThumbnailResponse> findByAccount(Long userId, Pageable pageable) {
+        return sightedPetsRepository.findAllByAccount(userId, pageable);
+    }
 
 
 

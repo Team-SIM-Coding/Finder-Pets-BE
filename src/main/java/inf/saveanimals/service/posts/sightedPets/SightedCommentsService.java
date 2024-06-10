@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * [제보 게시판 댓글]
+ * 제보-댓글 서비스
  */
 
 @Service

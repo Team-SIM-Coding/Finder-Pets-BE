@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 제보-관심하트 서비스
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional

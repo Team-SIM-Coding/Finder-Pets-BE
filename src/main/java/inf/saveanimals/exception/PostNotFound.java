@@ -1,7 +1,7 @@
 package inf.saveanimals.exception;
 
 /**
- * status -> 404
+ * status -> 404 오류
  */
 public class PostNotFound extends InfTeamException {
 

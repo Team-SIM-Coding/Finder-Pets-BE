@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 실종_댓글 -생성 요청 DTO
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LostCommentCreate {

@@ -1,5 +1,8 @@
 package inf.saveanimals.domain.animals.common;
 
+/**
+ * 중성화 여부 데이터
+ */
 public enum NeuteringStatus {
     Y("예","Yes"),
     N("아니오","No"),

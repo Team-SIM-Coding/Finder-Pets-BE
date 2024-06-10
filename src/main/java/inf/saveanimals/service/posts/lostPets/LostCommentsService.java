@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * [실종 게시판 댓글관련]
+ * 실종- 댓글 서비스
  */
 
 @Service

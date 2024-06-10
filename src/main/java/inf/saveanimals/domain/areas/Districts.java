@@ -4,6 +4,10 @@ import static inf.saveanimals.domain.areas.City.*;
 import lombok.Getter;
 
 import java.util.Arrays;
+
+/**
+ * 도시 정보 데이터
+ */
 @Getter
 public enum Districts {
     SEOUL_CITY("서울특별시", new City[]{

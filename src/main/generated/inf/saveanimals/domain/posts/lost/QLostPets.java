@@ -34,9 +34,9 @@ public class QLostPets extends EntityPathBase<LostPets> {
 
     public final StringPath color = createString("color");
 
-    public final ListPath<LostComments, SimplePath<LostComments>> comments = this.<LostComments, SimplePath<LostComments>>createList("comments", LostComments.class, SimplePath.class, PathInits.DIRECT2);
+    public final ListPath<LostComments, QLostComments> comments = this.<LostComments, QLostComments>createList("comments", LostComments.class, QLostComments.class, PathInits.DIRECT2);
 
-    public final StringPath content = createString("content");
+    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
     public final EnumPath<inf.saveanimals.domain.areas.Districts> districts = createEnum("districts", inf.saveanimals.domain.areas.Districts.class);
 
@@ -52,6 +52,8 @@ public class QLostPets extends EntityPathBase<LostPets> {
 
     public final StringPath longitude = createString("longitude");
 
+    public final DateTimePath<java.time.LocalDateTime> lostDate = createDateTime("lostDate", java.time.LocalDateTime.class);
+
     public final ListPath<LostImg, QLostImg> lostImgs = this.<LostImg, QLostImg>createList("lostImgs", LostImg.class, QLostImg.class, PathInits.DIRECT2);
 
     public final EnumPath<inf.saveanimals.domain.animals.common.NeuteringStatus> neuteringStatus = createEnum("neuteringStatus", inf.saveanimals.domain.animals.common.NeuteringStatus.class);
@@ -66,7 +68,11 @@ public class QLostPets extends EntityPathBase<LostPets> {
 
     public final NumberPath<Integer> views = createNumber("views", Integer.class);
 
-    public final NumberPath<Float> weight = createNumber("weight", Float.class);
+    public final StringPath weight = createString("weight");
+
+    public final StringPath writerNickname = createString("writerNickname");
+
+    public final StringPath writerProfileImage = createString("writerProfileImage");
 
     public QLostPets(String variable) {
         this(LostPets.class, forVariable(variable), INITS);

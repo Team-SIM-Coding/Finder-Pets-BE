@@ -15,7 +15,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 /**
- * [제보] 동물 등록 시 정보 입력
+ * 제보_본문 - 생성 요청 DTO
  */
 @Setter
 @Getter

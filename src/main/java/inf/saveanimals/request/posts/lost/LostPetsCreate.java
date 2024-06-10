@@ -1,6 +1,7 @@
 package inf.saveanimals.request.posts.lost;
 
 import inf.saveanimals.domain.animals.common.Breed;
+import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
 import inf.saveanimals.domain.areas.City;
@@ -11,8 +12,10 @@ import inf.saveanimals.domain.users.User;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
- * 실종동물 등록 시 정보 입력
+ * 실종_본문 - 생성 요청 DTO
  */
 @Setter
 @Getter
@@ -20,10 +23,11 @@ import lombok.*;
 public class LostPetsCreate {
 
     private Breed breed; // 품종
+    private BreedGroup breedGroup;
 
     private Gender gender; // 성별
 
-    private float weight; // 몸무게
+    private String weight; // 몸무게
     private String color; //색상
     private String age; // 나이
 
@@ -31,17 +35,23 @@ public class LostPetsCreate {
 
     private String specialMark; // 특징
     private String petOwnerTel; // 보호자 연락처
-    private String content; // 포스팅 본문
     private String happenPlace; // 잃어버린 장소
 
     private City city;
     private Districts districts;
 
+    private LocalDateTime lostDate; // 실종 날짜
+    private String latitude; //  잃어버린 장소 - 위도
+    private String longitude; // 잃어버린 장소 - 경도
+
+
     @Builder
-    public LostPetsCreate(Breed breed, Gender gender, float weight, String color, String age,
-                          NeuteringStatus neuteringStatus, String specialMark, String petOwnerTel, String content,
-                          String happenPlace, City city, Districts districts) {
+    public LostPetsCreate(Breed breed, BreedGroup breedGroup, Gender gender,
+                          String weight, String color, String age, NeuteringStatus neuteringStatus,
+                          String specialMark, String petOwnerTel, String happenPlace,
+                          City city, Districts districts, LocalDateTime lostDate, String latitude, String longitude) {
         this.breed = breed;
+        this.breedGroup = breedGroup;
         this.gender = gender;
         this.weight = weight;
         this.color = color;
@@ -49,16 +59,18 @@ public class LostPetsCreate {
         this.neuteringStatus = neuteringStatus;
         this.specialMark = specialMark;
         this.petOwnerTel = petOwnerTel;
-        this.content = content;
         this.happenPlace = happenPlace;
         this.city = city;
         this.districts = districts;
+        this.lostDate = lostDate;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public LostPets toEntity(User user) {
         return LostPets.builder()
-                .user(user)
                 .breed(breed)
+                .breedGroup(breedGroup)
                 .gender(gender)
                 .weight(weight)
                 .color(color)
@@ -66,10 +78,13 @@ public class LostPetsCreate {
                 .neuteringStatus(neuteringStatus)
                 .specialMark(specialMark)
                 .petOwnerTel(petOwnerTel)
-                .content(content)
-                .happenPlace(happenPlace)
                 .city(city)
                 .districts(districts)
+                .lostDate(lostDate)
+                .happenPlace(happenPlace)
+                .latitude(latitude)
+                .longitude(longitude)
+                .user(user)
                 .build();
     }
 

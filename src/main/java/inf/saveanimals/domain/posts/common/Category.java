@@ -2,7 +2,9 @@ package inf.saveanimals.domain.posts.common;
 
 import lombok.Getter;
 
-// post 카테고리
+/**
+ * 포스팅 카테고리 데이터
+ */
 @Getter
 public enum Category {
 

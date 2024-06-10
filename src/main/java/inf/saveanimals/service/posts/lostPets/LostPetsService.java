@@ -24,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * 실종-본문 서비스
+ */
 @Slf4j
 @Service
 @Transactional
@@ -100,9 +103,11 @@ public class LostPetsService {
     // 단건 조회
     @Transactional(readOnly = true)
     public LostPetsDetailResponse getPostDetail(Long postId) {
-        return lostPetsRepository.findById(postId)
-                .orElseThrow(PostNotFound::new)
-                .toMissingPostDetailResponse();
+        // 조회수
+        LostPets lostPet = findById(postId);
+        lostPet.viewCount();
+
+        return lostPet.toMissingPostDetailResponse();
     }
 
 

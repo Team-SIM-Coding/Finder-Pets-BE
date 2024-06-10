@@ -6,6 +6,10 @@ import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
 import lombok.*;
 
+/**
+ * 조회 DTO - 필터 / 검색어? 같은거 담는 곳
+ */
+
 @Getter
 @Setter
 @AllArgsConstructor

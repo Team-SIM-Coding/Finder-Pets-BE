@@ -1,5 +1,8 @@
 package inf.saveanimals.domain.animals.common;
 
+/**
+ * 동물 성별 데이터
+ */
 public enum Gender {
 
     MALE("수컷", "M"),

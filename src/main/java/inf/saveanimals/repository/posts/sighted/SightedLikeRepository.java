@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+/**
+ * 제보 - 관심하트 리포지토리
+ */
 public interface SightedLikeRepository extends JpaRepository<SightedLike, Long> {
     Optional<SightedLike> findByUserAndSightedPets(User user, SightedPets sightedPets);
 }

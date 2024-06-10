@@ -2,6 +2,9 @@ package inf.saveanimals.domain.posts.common;
 
 import lombok.Getter;
 
+/**
+ * 포스팅 글 해결유무 표시
+ */
 @Getter
 public enum IsCompleted {
 

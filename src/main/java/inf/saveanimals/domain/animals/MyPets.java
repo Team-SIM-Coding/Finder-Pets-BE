@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * 반려동물 정보
+ * 반려동물 정보 (회원 정보에서 필요한?)
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,5 +1,6 @@
 package inf.saveanimals.response.posts.sightedPets;
 
+import com.querydsl.core.annotations.QueryProjection;
 import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.areas.City;
@@ -34,10 +35,25 @@ public class SightedPetsThumbnailResponse {
 
     private String thumbnailImgPath;  // 이미지
 
-    private long viewCount; //조회수
-    private long likeCount; //좋아요 수
+    private Integer views; //조회수
+    private Integer totalLike; //좋아요 수
 
-
-
-
+    @QueryProjection
+    public SightedPetsThumbnailResponse(Long id, Category category, IsCompleted isCompleted, LocalDateTime foundDate, LocalDateTime createdAt,
+                                        String foundPlace, City city, Districts districts, BreedGroup breedGroup, Breed breed,
+                                        String thumbnailImgPath, Integer views, Integer totalLike) {
+        this.id = id;
+        this.category = category;
+        this.isCompleted = isCompleted;
+        this.foundDate = foundDate;
+        this.createdAt = createdAt;
+        this.foundPlace = foundPlace;
+        this.city = city;
+        this.districts = districts;
+        this.breedGroup = breedGroup;
+        this.breed = breed;
+        this.thumbnailImgPath = thumbnailImgPath;
+        this.views = views;
+        this.totalLike = totalLike;
+    }
 }
