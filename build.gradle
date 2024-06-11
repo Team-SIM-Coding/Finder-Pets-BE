@@ -79,6 +79,13 @@ processResources {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+
+jar {
+	enabled = false
+}
+
+
+
 bootJar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

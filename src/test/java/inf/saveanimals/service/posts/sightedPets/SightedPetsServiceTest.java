@@ -19,6 +19,7 @@ import inf.saveanimals.request.posts.sighted.SightedPetsCreate;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
 import inf.saveanimals.service.posts.lostPets.LostPetsService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,11 @@ class SightedPetsServiceTest {
     @Autowired
     private SightedImgRepository imgRepository;
 
+    @BeforeEach
+    void clean() {
+        sightedPetsRepository.deleteAll();
+        userRepository.deleteAll();
+    }
 
 
     @Test
