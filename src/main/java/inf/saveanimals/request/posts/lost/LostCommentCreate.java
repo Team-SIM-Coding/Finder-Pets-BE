@@ -1,6 +1,7 @@
 package inf.saveanimals.request.posts.lost;
 
 import inf.saveanimals.domain.posts.lost.LostComments;
+import inf.saveanimals.domain.users.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,22 +14,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LostCommentCreate {
 
+    // 2개는 로그인 정보로 받기
     private String user_nickname; // 작성자 닉네임
     private String user_image; // 작성자 프로필
+
     private String content; // 내용
 
     @Builder
-    public LostCommentCreate(String user_nickname, String user_image, String content) {
-        this.user_nickname = user_nickname;
-        this.user_image = user_image;
+    public LostCommentCreate(String content) {
         this.content = content;
     }
 
-    public LostComments toEntity() {
+
+    public LostComments toEntity(User user) {
         return LostComments.builder()
-                .user_nickname(user_nickname)
-                .user_image(user_image)
+                .user_nickname(user.getNickname())
+                .user_image(user.getImg())
                 .content(content)
                 .build();
     }
+
+
 }

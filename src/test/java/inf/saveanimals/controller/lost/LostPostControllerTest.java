@@ -26,6 +26,9 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -72,6 +75,9 @@ class LostPostControllerTest {
     @Autowired
     private LostImgRepository imgRepository;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @BeforeEach
     void clean() {
         lostPetsRepository.deleteAll();
@@ -89,6 +95,7 @@ class LostPostControllerTest {
     void create_post_success() throws Exception {
         //given
         User user = getUser();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
 
         LostPetsCreate postCreate = getLostPetsCreate();
         MockMultipartFile request = new MockMultipartFile("postCreate", null, "application/json", objectMapper.writeValueAsString(postCreate).getBytes(StandardCharsets.UTF_8));
@@ -97,12 +104,13 @@ class LostPostControllerTest {
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                .multipart(HttpMethod.POST, "/posts/lost/{userId}", user.getId())
+                .multipart(HttpMethod.POST, "/posts/lost")
                         .file(request)
                         .file(multipartFiles.get(0))
                         .file(multipartFiles.get(1))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
                )
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -119,10 +127,10 @@ class LostPostControllerTest {
 
     private User getUser() {
         User user = User.builder()
-                .name("none")
+                //.name("none")
                 .email("none1234@gmail.com")
                 .password("1234")
-                .img("/imgpath")
+              //  .img("/imgpath")
                 .build();
         userRepository.save(user);
         return user;

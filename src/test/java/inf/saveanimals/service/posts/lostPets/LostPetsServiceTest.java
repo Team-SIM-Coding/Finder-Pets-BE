@@ -95,7 +95,7 @@ class LostPetsServiceTest {
         List<MultipartFile> multipartFileList = generateMultipartFileList();
 
         // when
-        lostPetsService.write(savedUser.getId(), postCreate, multipartFileList);
+        lostPetsService.write(savedUser, postCreate, multipartFileList);
 
         //then
         LostPets post = lostPetsRepository.findAll().get(0);
@@ -132,7 +132,7 @@ class LostPetsServiceTest {
 
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
-        Long postId = lostPetsService.write(user.getId(), postCreate, multipartFileList);
+        Long postId = lostPetsService.write(user, postCreate, multipartFileList);
 
 
         LostPetsEdit postEdit = LostPetsEdit.builder()
@@ -176,7 +176,7 @@ class LostPetsServiceTest {
 
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
-        Long postId = lostPetsService.write(user.getId(), postCreate, multipartFileList);
+        Long postId = lostPetsService.write(user, postCreate, multipartFileList);
 
         //when
         lostPetsService.deletePost(postId);

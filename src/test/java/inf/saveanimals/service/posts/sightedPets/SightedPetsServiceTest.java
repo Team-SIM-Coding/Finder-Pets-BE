@@ -89,7 +89,7 @@ class SightedPetsServiceTest {
         List<MultipartFile> multipartFileList = generateMultipartFileList();
 
         // when
-        Long postId = sightedPetsService.write(user.getId(), postCreate, multipartFileList);
+        Long postId = sightedPetsService.write(user, postCreate, multipartFileList);
 
 
         // then
@@ -125,7 +125,7 @@ class SightedPetsServiceTest {
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
 
-        Long postId = sightedPetsService.write(user.getId(), postCreate, multipartFileList);
+        Long postId = sightedPetsService.write(user, postCreate, multipartFileList);
 
 
         SightedPetsEdit postEdit = SightedPetsEdit.builder()
@@ -169,7 +169,7 @@ class SightedPetsServiceTest {
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
 
-        Long postId = sightedPetsService.write(user.getId(), postCreate, multipartFileList);
+        Long postId = sightedPetsService.write(user, postCreate, multipartFileList);
 
         //when
         sightedPetsService.deletePost(postId);

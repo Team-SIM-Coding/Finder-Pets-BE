@@ -5,6 +5,7 @@ import inf.saveanimals.service.UserService;
 import inf.saveanimals.service.posts.lostPets.LostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,8 @@ public class LostLikesApiController {
     private final UserService userService;
     private final LostLikeService likeService;
 
-    @PostMapping("/{lostPetsId}/like/{userId}")
-    public ResponseEntity<String> like(@PathVariable("lostPetsId") Long sightedPetsId, @PathVariable("userId") Long userId) {
-        User user = userService.findById(userId);
+    @PostMapping("/{lostPetsId}/like")
+    public ResponseEntity<String> like(@PathVariable("lostPetsId") Long sightedPetsId, @AuthenticationPrincipal User user) {
 
         boolean liked = likeService.insert(sightedPetsId, user);
         // 관심하트를 토글하는 로직 구현

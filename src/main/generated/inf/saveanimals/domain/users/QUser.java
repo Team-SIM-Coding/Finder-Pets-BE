@@ -36,7 +36,11 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
+    public final StringPath roles = createString("roles");
+
     public final ListPath<inf.saveanimals.domain.posts.sighted.SightedPets, inf.saveanimals.domain.posts.sighted.QSightedPets> sightedPets = this.<inf.saveanimals.domain.posts.sighted.SightedPets, inf.saveanimals.domain.posts.sighted.QSightedPets>createList("sightedPets", inf.saveanimals.domain.posts.sighted.SightedPets.class, inf.saveanimals.domain.posts.sighted.QSightedPets.class, PathInits.DIRECT2);
+
+    public final EnumPath<UserLevel> userLevel = createEnum("userLevel", UserLevel.class);
 
     public final StringPath userTel = createString("userTel");
 

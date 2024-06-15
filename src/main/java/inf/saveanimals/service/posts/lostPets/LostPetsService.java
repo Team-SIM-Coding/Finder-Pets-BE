@@ -5,6 +5,7 @@ import inf.saveanimals.domain.posts.lost.LostImg;
 import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.exception.PostNotFound;
+import inf.saveanimals.exception.ResourceNotFoundException;
 import inf.saveanimals.repository.posts.lost.LostPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.posts.SearchCondition;
@@ -38,11 +39,14 @@ public class LostPetsService {
     private final LostImgService imgService;
 
     // 게시글 작성
-    public Long write(Long userId, LostPetsCreate postDto, List<MultipartFile> fileList) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
+    public Long write(User user, LostPetsCreate postDto, List<MultipartFile> fileList) throws IOException {
 
-        LostPets savedPost = lostPetsRepository.save(postDto.toEntity(user));
+        User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
+
+        log.info("login user info ={]", loginUser.getEmail());
+
+        LostPets savedPost = lostPetsRepository.save(postDto.toEntity(loginUser));
 
         // 이미지 추가
         //이미지 등록
@@ -126,8 +130,12 @@ public class LostPetsService {
 
     // 계정당 포스트 조회
     @Transactional(readOnly = true)
-    public Page<LostPetsThumbnailResponse> findByAccount(Long userId, Pageable pageable) {
-        return lostPetsRepository.findAllByAccount(userId, pageable);
+    public Page<LostPetsThumbnailResponse> findByAccount(User user, Pageable pageable) {
+
+        User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
+
+        return lostPetsRepository.findAllByAccount(loginUser.getId(), pageable);
     }
 
 

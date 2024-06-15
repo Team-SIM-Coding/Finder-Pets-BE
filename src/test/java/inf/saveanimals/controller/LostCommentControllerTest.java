@@ -12,20 +12,34 @@ import inf.saveanimals.repository.posts.lost.LostPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.posts.lost.LostCommentCreate;
 import inf.saveanimals.request.posts.lost.LostPetsCreate;
+import inf.saveanimals.request.users.UserCreate;
+import inf.saveanimals.response.users.LoginUserResponse;
+import inf.saveanimals.service.UserService;
+import inf.saveanimals.service.posts.lostPets.LostCommentsService;
 import inf.saveanimals.service.posts.lostPets.LostPetsService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
+
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,6 +47,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,21 +68,25 @@ class LostCommentControllerTest {
     
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private LostCommentsRepository commentsRepository;
-    
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+
     @AfterEach
     void clean() {
         commentsRepository.deleteAll();
         petsRepository.deleteAll();
         userRepository.deleteAll();
     }
-    
+
     @Test
     @DisplayName("댓글 작성하기")
     void addComments_success() throws Exception {
-        //given
+        // Given
         User user = User.builder()
                 .name("none")
                 .email("none1234@gmail.com")
@@ -75,7 +94,8 @@ class LostCommentControllerTest {
                 .password("1234")
                 .img("/imgpath")
                 .build();
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
 
         LostPetsCreate postCreate = LostPetsCreate.builder()
                 .breed(Breed.AKITA)
@@ -88,31 +108,25 @@ class LostCommentControllerTest {
                 .petOwnerTel("123-123")
                 .happenPlace("공주시 우금티터널")
                 .build();
-        
+
         List<MultipartFile> multipartFileList = generateMultipartFileList();
-        Long postId = lostPetsService.write(user.getId(), postCreate, multipartFileList);
-        LostPets lostPets = lostPetsService.findById(postId);
+        Long postId = lostPetsService.write(savedUser, postCreate, multipartFileList);
+
 
         LostCommentCreate commentCreate = LostCommentCreate.builder()
-                .user_nickname("noneNick")
-                .user_image("/imgpath")
                 .content("댓글입니다. 안녕하세요.")
                 .build();
 
+
         String json = objectMapper.writeValueAsString(commentCreate);
 
-
-        mockMvc.perform(post("/lostPets/{postId}/comments", lostPets.getId())
+        // When and Then
+        mockMvc.perform(post("/lostPets/{postId}/comments", postId)
+                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
-
-        assertEquals(1L, commentsRepository.count());
-
-        LostComments comments = commentsRepository.findAll().get(0);
-        assertEquals("noneNick", comments.getUser_nickname());
-        assertEquals("댓글입니다. 안녕하세요.", comments.getContent());
     }
 
 

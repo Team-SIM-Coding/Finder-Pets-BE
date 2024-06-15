@@ -5,6 +5,7 @@ import inf.saveanimals.domain.posts.sighted.SightedImg;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.exception.PostNotFound;
+import inf.saveanimals.exception.ResourceNotFoundException;
 import inf.saveanimals.exception.UserNotFound;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
@@ -41,11 +42,11 @@ public class SightedPetsService {
 
 
     // 게시글 작성
-    public Long write(Long userId, SightedPetsCreate postDto, List<MultipartFile> fileList) throws IOException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
+    public Long write(User user, SightedPetsCreate postDto, List<MultipartFile> fileList) throws IOException {
+        User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
 
-        SightedPets savedPost = sightedPetsRepository.save(postDto.toEntity(user));
+        SightedPets savedPost = sightedPetsRepository.save(postDto.toEntity(loginUser));
 
         // 이미지 추가
         //이미지 등록
@@ -60,7 +61,6 @@ public class SightedPetsService {
             // 리스트 형태로 이미지들 저장
             SightedImg postImage = imgService.saveImg(imgRequest, fileList.get(i));
             savedPost.uploadImg(postImage);
-
         }
         return savedPost.getId();
     }
@@ -126,8 +126,11 @@ public class SightedPetsService {
 
     // 계정당 포스트 조회
     @Transactional(readOnly = true)
-    public Page<SightedPetsThumbnailResponse> findByAccount(Long userId, Pageable pageable) {
-        return sightedPetsRepository.findAllByAccount(userId, pageable);
+    public Page<SightedPetsThumbnailResponse> findByAccount(User user, Pageable pageable) {
+        User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
+
+        return sightedPetsRepository.findAllByAccount(loginUser.getId(), pageable);
     }
 
 
