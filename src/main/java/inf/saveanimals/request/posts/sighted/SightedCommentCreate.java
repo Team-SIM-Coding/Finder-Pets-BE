@@ -2,13 +2,16 @@ package inf.saveanimals.request.posts.sighted;
 
 import inf.saveanimals.domain.posts.sighted.SightedComments;
 import inf.saveanimals.domain.users.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 제보_댓글 - 생성 요청 DTO
  */
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SightedCommentCreate {
 
     // 2개는 로그인 정보로 받기

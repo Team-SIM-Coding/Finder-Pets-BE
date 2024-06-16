@@ -26,11 +26,9 @@ public class LostPetsCreate {
     private BreedGroup breedGroup;
 
     private Gender gender; // 성별
-
     private String weight; // 몸무게
     private String color; //색상
     private String age; // 나이
-
     private NeuteringStatus neuteringStatus; // 중성화 여부
 
     private String specialMark; // 특징
@@ -66,6 +64,7 @@ public class LostPetsCreate {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
 
     public LostPets toEntity(User user) {
         return LostPets.builder()

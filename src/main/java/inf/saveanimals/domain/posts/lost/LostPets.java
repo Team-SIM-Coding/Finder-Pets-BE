@@ -219,6 +219,12 @@ public class LostPets {
         this.totalLike--;
     }
 
+    public void checkLikeCount() {
+        if (totalLike < 1) {
+            this.totalLike = 0;
+        }
+    }
+
     // 댓글 - 연관관계 로직
     public void addComment(LostComments comment) {
         comment.assignToLostPets(this);

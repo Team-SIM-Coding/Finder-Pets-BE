@@ -87,7 +87,7 @@ class LostCommentControllerTest {
     @DisplayName("댓글 작성하기")
     void addComments_success() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.test()
                 .name("none")
                 .email("none1234@gmail.com")
                 .nickname("noneNick")

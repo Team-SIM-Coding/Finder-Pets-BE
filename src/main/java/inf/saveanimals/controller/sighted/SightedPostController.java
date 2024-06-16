@@ -49,7 +49,7 @@ public class SightedPostController {
 
     // 수정
     @PatchMapping("/posts/sighted/{postId}")
-    public void editPost(@PathVariable("postId") Long postId, @RequestParam("postEdit") SightedPetsEdit postEdit, @AuthenticationPrincipal User user) {
+    public void editPost(@PathVariable("postId") Long postId, @RequestPart("postEdit") SightedPetsEdit postEdit, @AuthenticationPrincipal User user) {
         postService.edit(postId, postEdit);
     }
 
@@ -74,7 +74,7 @@ public class SightedPostController {
     }
 
     // 검색 페이징
-    @GetMapping("/posts/sighted")
+    @GetMapping("/posts/sighted/search")
     public Page<SightedPetsThumbnailResponse> search(SearchCondition condition, Pageable pageable) {
         return postService.findPosts(condition, pageable);
     }

@@ -26,7 +26,7 @@ public class SightedLikeService {
     private final UserRepository userRepository;
 
     // 관심하트 누르기
-    public boolean insert(Long sightedPetsId, User user) {
+    public Integer insert(Long sightedPetsId, User user) {
         User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
                 () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
 
@@ -34,10 +34,9 @@ public class SightedLikeService {
         SightedPets sightedPets = sightedPetsRepository.findById(sightedPetsId)
                 .orElseThrow(PostNotFound::new);
 
-        // 이미 관심하트 되어 있으면, 에러 반환
+        // 이미 관심하트 되어 있으면, 하트 취소된다.
         if (likeRepository.findByUserAndSightedPets(loginUser, sightedPets).isPresent()) {
             sightedPets.deleteLike();
-            return false;
         }
 
         SightedLike sightedLike = SightedLike.builder()
@@ -47,7 +46,8 @@ public class SightedLikeService {
 
         likeRepository.save(sightedLike);
         sightedPets.addLike();
-        return true;
+
+        return sightedPets.getTotalLike();
     }
 
     // 관심 하트 취소하기
@@ -63,5 +63,6 @@ public class SightedLikeService {
                 .orElseThrow(LikesNotFound::new);
 
         likeRepository.delete(sightedLike);
+        sightedPets.deleteLike();
     }
 }

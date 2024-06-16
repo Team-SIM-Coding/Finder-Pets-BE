@@ -43,6 +43,7 @@ public class SecurityConfig {
 
 						.requestMatchers(
 								"/posts/lost/search",
+								"/posts/sighted/search",
 								"/user/checkId",
 								"/user/register",
 								"/user/login").permitAll()

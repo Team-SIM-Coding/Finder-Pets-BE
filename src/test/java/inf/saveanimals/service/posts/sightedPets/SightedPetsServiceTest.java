@@ -63,7 +63,7 @@ class SightedPetsServiceTest {
     @DisplayName("글 등록")
     void write_post_success() throws IOException {
         // given
-        User user = User.builder()
+        User user = User.test()
                 .name("none")
                 .email("none1234@gmail.com")
                 .password("1234")
@@ -72,9 +72,13 @@ class SightedPetsServiceTest {
         userRepository.save(user);
 
         SightedPetsCreate postCreate = SightedPetsCreate.builder()
-                .createdAt(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
                 .foundDate(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
                 .foundPlace("서울특별시 광진구 군자역인근")
+                .gender(Gender.FEMALE)
+                .weight("10살")
+                .color("black")
+                .age("19(년생)")
+                .neuteringStatus(NeuteringStatus.Y)
                 .specialMark("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
                 .reporterTel("123-123")
                 .latitude("45")
@@ -102,7 +106,7 @@ class SightedPetsServiceTest {
     @DisplayName("작성된 글을 수정")
     void edit_post_success() throws IOException {
         // given
-        User user = User.builder()
+        User user = User.test()
                 .name("none")
                 .email("none1234@gmail.com")
                 .password("1234")
@@ -111,10 +115,15 @@ class SightedPetsServiceTest {
         userRepository.save(user);
 
         SightedPetsCreate postCreate = SightedPetsCreate.builder()
-                .createdAt(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
+
                 .foundDate(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
                 .foundPlace("서울특별시 광진구 군자역인근")
                 .specialMark("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
+                .gender(Gender.FEMALE)
+                .weight("10살")
+                .color("black")
+                .age("19(년생)")
+                .neuteringStatus(NeuteringStatus.Y)
                 .reporterTel("123-123")
                 .latitude("45")
                 .longitude("45")
@@ -146,7 +155,7 @@ class SightedPetsServiceTest {
     @DisplayName("글 삭제")
     void delete_success() throws IOException {
         // given
-        User user = User.builder()
+        User user = User.test()
                 .name("none")
                 .email("none1234@gmail.com")
                 .password("1234")
@@ -155,10 +164,14 @@ class SightedPetsServiceTest {
         userRepository.save(user);
 
         SightedPetsCreate postCreate = SightedPetsCreate.builder()
-                .createdAt(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
                 .foundDate(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
                 .foundPlace("서울특별시 광진구 군자역인근")
                 .specialMark("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
+                .gender(Gender.FEMALE)
+                .weight("10살")
+                .color("black")
+                .age("19(년생)")
+                .neuteringStatus(NeuteringStatus.Y)
                 .reporterTel("123-123")
                 .latitude("45")
                 .longitude("45")

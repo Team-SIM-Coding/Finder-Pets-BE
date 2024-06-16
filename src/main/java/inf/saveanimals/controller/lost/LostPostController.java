@@ -27,7 +27,7 @@ public class LostPostController {
     private final LostImgService imgService;
 
     // 등록
-    @PostMapping("/posts/lost/create")
+    @PostMapping("/posts/lost")
     public void write(@AuthenticationPrincipal User user,
                       @Validated @RequestPart(name = "postCreate") LostPetsCreate postCreate,
                       @RequestParam(name = "files") List<MultipartFile> multipartFiles) throws IOException {
@@ -44,7 +44,7 @@ public class LostPostController {
 
     // 수정
     @PatchMapping("/posts/lost/{postId}")
-    public void editPost(@PathVariable("postId") Long postId, @RequestParam("postEdit") LostPetsEdit postEdit, @AuthenticationPrincipal User user) {
+    public void editPost(@PathVariable("postId") Long postId, @RequestPart("postEdit") LostPetsEdit postEdit, @AuthenticationPrincipal User user) {
         postService.edit(postId, postEdit);
     }
 

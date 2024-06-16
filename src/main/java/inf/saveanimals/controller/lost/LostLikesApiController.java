@@ -1,33 +1,30 @@
 package inf.saveanimals.controller.lost;
 
 import inf.saveanimals.domain.users.User;
+import inf.saveanimals.response.posts.LikesResponse;
 import inf.saveanimals.service.UserService;
 import inf.saveanimals.service.posts.lostPets.LostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/lost")
 @RequiredArgsConstructor
 public class LostLikesApiController {
 
-    private final UserService userService;
     private final LostLikeService likeService;
 
-    @PostMapping("/{lostPetsId}/like")
-    public ResponseEntity<String> like(@PathVariable("lostPetsId") Long sightedPetsId, @AuthenticationPrincipal User user) {
+    @PostMapping("/posts/lost/{lostPetsId}/like")
+    public LikesResponse like(@PathVariable("lostPetsId") Long sightedPetsId, @AuthenticationPrincipal User user) {
 
-        boolean liked = likeService.insert(sightedPetsId, user);
-        // 관심하트를 토글하는 로직 구현
-        if (liked) {
-            return ResponseEntity.ok("liked");
-        } else {
-            return ResponseEntity.ok("unliked");
-        }
+        Integer totalLikes = likeService.insert(sightedPetsId, user);
+
+        return LikesResponse.of("좋아요 누르기 성공", totalLikes);
+    }
+
+    @DeleteMapping("/posts/lost/{lostPetsId}/like")
+    public void deleteLike(@PathVariable("lostPetsId") Long sightedPetsId, @AuthenticationPrincipal User user) {
+        likeService.delete(sightedPetsId, user);
     }
 }

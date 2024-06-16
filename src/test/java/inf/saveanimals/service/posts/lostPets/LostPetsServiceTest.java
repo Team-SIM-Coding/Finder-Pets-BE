@@ -64,7 +64,7 @@ class LostPetsServiceTest {
     @DisplayName("글 작성")
     void create_post_success() throws IOException {
         //given
-        User user = User.builder()
+        User user = User.test()
                 .name("none")
                 .email("none1234@gmail.com")
                 .password("1234")
@@ -108,7 +108,7 @@ class LostPetsServiceTest {
     @DisplayName("작성된 글을 수정")
     void edit_post_success() throws IOException {
         // given
-        User user = User.builder()
+        User user = User.test()
                 .name("none")
                 .email("none1234@gmail.com")
                 .password("1234")
@@ -152,7 +152,7 @@ class LostPetsServiceTest {
     @DisplayName("글 삭제")
     void delete_success() throws IOException {
         // given
-        User user = User.builder()
+        User user = User.test()
                 .name("none")
                 .email("none1234@gmail.com")
                 .password("1234")

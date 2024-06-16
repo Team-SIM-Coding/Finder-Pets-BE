@@ -13,6 +13,7 @@ import inf.saveanimals.repository.posts.lost.LostPetsRepository;
 import inf.saveanimals.repository.posts.sighted.SightedLikeRepository;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
+import inf.saveanimals.response.posts.LikesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,17 +32,16 @@ public class LostLikeService {
 
 
     // 관심하트 누르기
-    public boolean insert(Long postId, User user) {
+    public Integer insert(Long postId, User user) {
         User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
                 () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
 
         LostPets lostPets = lostPetsRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
 
-        // 이미 관심하트 되어 있으면, 에러 반환
+        // 이미 관심하트 되어 있으면, 취소 처리
         if (likeRepository.findByUserAndLostPets(loginUser, lostPets).isPresent()) {
             lostPets.deleteLike();
-            return false;
         }
 
         LostLike lostLike = LostLike.builder()
@@ -51,7 +51,8 @@ public class LostLikeService {
 
         likeRepository.save(lostLike);
         lostPets.addLike();
-        return true;
+
+        return lostPets.getTotalLike();
     }
 
     // 관심 하트 취소하기
@@ -66,5 +67,6 @@ public class LostLikeService {
                 .orElseThrow(LikesNotFound::new);
 
         likeRepository.delete(lostLike);
+        lostPets.deleteLike();
     }
 }

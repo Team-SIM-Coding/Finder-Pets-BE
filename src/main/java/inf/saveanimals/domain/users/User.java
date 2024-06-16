@@ -61,6 +61,16 @@ public class User implements UserDetails {
         this.img = "https://storage.googleapis.com/java-board-bucket/defaultImg.jpg";
     }
 
+    @Builder(builderMethodName = "test")
+    public User(String name, String nickname, String email, String password, String img, String userTel) {
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.img = img;
+        this.userTel = userTel;
+    }
+
     public void uploadUserInfo(String userTel, String name) {
         this.userTel = userTel;
         this.name = name;
