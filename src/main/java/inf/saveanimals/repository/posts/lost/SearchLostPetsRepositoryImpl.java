@@ -33,7 +33,7 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
 
         QueryResults<LostPetsThumbnailResponse> results  = queryFactory.select(
                         new QLostPetsThumbnailResponse(
-                                lostPets.id,
+                                lostPets.id.as("pet_id"),
                                 lostPets.category,
                                 lostPets.isCompleted,
                                 lostPets.breed,
@@ -42,7 +42,7 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
                                 lostPets.weight,
                                 lostPets.specialMark,
                                 lostPets.happenPlace,
-                                lostImg.imgUrl.as("thumbnailImgPath"),
+                                lostImg.imgUrl.as("imgUrl"),
                                 lostPets.views,
                                 lostPets.totalLike
                         ))
@@ -68,7 +68,7 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
 
         QueryResults<LostPetsThumbnailResponse> results  = queryFactory.select(
                         new QLostPetsThumbnailResponse(
-                                lostPets.id,
+                                lostPets.id.as("pet_id"),
                                 lostPets.category,
                                 lostPets.isCompleted,
                                 lostPets.breed,
@@ -77,7 +77,7 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
                                 lostPets.weight,
                                 lostPets.specialMark,
                                 lostPets.happenPlace,
-                                lostImg.imgUrl.as("thumbnailImgPath"),
+                                lostImg.imgUrl.as("imgUrl"),
                                 lostPets.views,
                                 lostPets.totalLike
                         ))

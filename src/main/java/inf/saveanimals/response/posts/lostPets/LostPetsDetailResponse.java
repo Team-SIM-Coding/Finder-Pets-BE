@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LostPetsDetailResponse {
 
-    private Long id; // lost_pets pk
+    private Long pet_id; // lost_pets pk
 
     private Category category; // 글 카테고리 (실종 / 제보)
     private IsCompleted isCompleted; // 글 상태
@@ -62,14 +62,14 @@ public class LostPetsDetailResponse {
 
     @QueryProjection
     @Builder
-    public LostPetsDetailResponse(Long id, Category category, IsCompleted isCompleted,
+    public LostPetsDetailResponse(Long pet_id, Category category, IsCompleted isCompleted,
                                   String writerNickname, String writerProfileImage,
                                   LocalDateTime lostDate, LocalDateTime createdAt,
                                   Breed breed, BreedGroup breedGroup, Gender gender, String weight, String color, String age,
                                   NeuteringStatus neuteringStatus, String specialMark, String petOwnerTel,
                                   City city, Districts districts, String happenPlace, String latitude, String longitude,
                                   List<String> imgPaths, Integer views, Integer totalLike) {
-        this.id = id;
+        this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
         this.writerNickname = writerNickname;

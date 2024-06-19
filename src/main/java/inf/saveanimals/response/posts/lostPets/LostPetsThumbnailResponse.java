@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LostPetsThumbnailResponse {
-    private Long id; // lostPets pk
+    private Long pet_id; // lostPets pk
 
     private Category category; // 글 카테고리 (실종 / 제보)
     private IsCompleted isCompleted; // 글 상태
@@ -31,17 +31,17 @@ public class LostPetsThumbnailResponse {
 
 
     // 이미지
-    private String thumbnailImgPath;
+    private String imgUrl;
 
     private Integer views; //조회수
     private Integer totalLike; //좋아요 수
 
     @QueryProjection
-    public LostPetsThumbnailResponse(Long id, Category category, IsCompleted isCompleted,
+    public LostPetsThumbnailResponse(Long pet_id, Category category, IsCompleted isCompleted,
                                      Breed breed, BreedGroup breedGroup, Gender gender,
                                      String weight, String specialMark, String happenPlace,
-                                     String thumbnailImgPath, Integer views, Integer totalLike) {
-        this.id = id;
+                                     String imgUrl, Integer views, Integer totalLike) {
+        this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
         this.breed = breed;
@@ -50,7 +50,7 @@ public class LostPetsThumbnailResponse {
         this.weight = weight;
         this.specialMark = specialMark;
         this.happenPlace = happenPlace;
-        this.thumbnailImgPath = thumbnailImgPath;
+        this.imgUrl = imgUrl;
         this.views = views;
         this.totalLike = totalLike;
     }

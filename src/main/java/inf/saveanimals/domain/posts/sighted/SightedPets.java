@@ -160,7 +160,7 @@ public class SightedPets {
 
     public SightedPetsDetailResponse toSightedPetsDetailResponse() {
         return SightedPetsDetailResponse.builder()
-                .id(id)
+                .pet_id(id)
                 .category(category)
                 .isCompleted(isCompleted)
                 .writerNickname(writerNickname)

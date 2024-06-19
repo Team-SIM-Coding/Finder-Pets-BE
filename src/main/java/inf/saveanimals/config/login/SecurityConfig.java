@@ -41,12 +41,13 @@ public class SecurityConfig {
 				.authorizeHttpRequests(authorize
 						-> authorize
 
-						.requestMatchers(
-								"/posts/lost/search",
-								"/posts/sighted/search",
-								"/user/checkId",
-								"/user/register",
-								"/user/login").permitAll()
+						.requestMatchers("/api/posts/sighted/view/{pet_id}",
+								"/api/posts/lost/view/{pet_id}",
+								"/api/posts/lost/search",
+								"/api/posts/sighted/search",
+								"/api/user/checkId",
+								"/api/user/register",
+								"/api/user/login").permitAll()
 						.anyRequest().authenticated())
 
 

@@ -9,8 +9,6 @@ import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,7 +26,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SightedPetsDetailResponse {
 
-    private Long id; // sighted_pets pk
+    private Long pet_id; // sighted_pets pk
 
     private Category category; // 글 카테고리 (실종 / 제보)
     private IsCompleted isCompleted; // 글 상태
@@ -68,14 +66,14 @@ public class SightedPetsDetailResponse {
 
     @QueryProjection
     @Builder
-    public SightedPetsDetailResponse(Long id, Category category, IsCompleted isCompleted,
+    public SightedPetsDetailResponse(Long pet_id, Category category, IsCompleted isCompleted,
                                      String writerNickname, String writerProfileImage,
                                      LocalDateTime foundDate, LocalDateTime createdAt, Breed breed, BreedGroup breedGroup,
                                      Gender gender, String weight, String color, String age, NeuteringStatus neuteringStatus,
                                      String specialMark, String reporterTel,
                                      City city, Districts districts, String foundPlace, String latitude, String longitude,
                                      List<String> imgPaths, Integer views, Integer totalLike) {
-        this.id = id;
+        this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
         this.writerNickname = writerNickname;

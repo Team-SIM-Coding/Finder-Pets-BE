@@ -104,7 +104,7 @@ class LostPostControllerTest {
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                .multipart(HttpMethod.POST, "/posts/lost")
+                .multipart(HttpMethod.POST, "/api/posts/lost")
                         .file(request)
                         .file(multipartFiles.get(0))
                         .file(multipartFiles.get(1))

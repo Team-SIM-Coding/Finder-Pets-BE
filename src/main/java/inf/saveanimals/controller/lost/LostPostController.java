@@ -4,6 +4,7 @@ import inf.saveanimals.domain.users.User;
 import inf.saveanimals.request.posts.SearchCondition;
 import inf.saveanimals.request.posts.lost.LostPetsCreate;
 import inf.saveanimals.request.posts.lost.LostPetsEdit;
+import inf.saveanimals.response.posts.lostPets.LostPetsDetailResponse;
 import inf.saveanimals.response.posts.lostPets.LostPetsThumbnailResponse;
 import inf.saveanimals.service.posts.lostPets.LostImgService;
 import inf.saveanimals.service.posts.lostPets.LostPetsService;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class LostPostController {
@@ -37,27 +39,27 @@ public class LostPostController {
 
 
     // 삭제
-    @DeleteMapping("/posts/lost/{postId}")
-    public void delete(@PathVariable("postId") Long postId, @AuthenticationPrincipal User user) {
+    @DeleteMapping("/posts/lost/{pet_id}")
+    public void delete(@PathVariable("pet_id") Long postId, @AuthenticationPrincipal User user) {
         postService.deletePost(postId);
     }
 
     // 수정
-    @PatchMapping("/posts/lost/{postId}")
-    public void editPost(@PathVariable("postId") Long postId, @RequestPart("postEdit") LostPetsEdit postEdit, @AuthenticationPrincipal User user) {
+    @PatchMapping("/posts/lost/{pet_id}")
+    public void editPost(@PathVariable("pet_id") Long postId, @RequestPart("postEdit") LostPetsEdit postEdit, @AuthenticationPrincipal User user) {
         postService.edit(postId, postEdit);
     }
 
     // 이미지 삭제
-    @DeleteMapping("/posts/lost/{postId}/{imgId}")
-    public void deleteImg(@PathVariable("postId") Long postId,
+    @DeleteMapping("/posts/lost/{pet_id}/{imgId}")
+    public void deleteImg(@PathVariable("pet_id") Long postId,
                           @PathVariable("imgId") Long postImgId, @AuthenticationPrincipal User user) {
         imgService.deleteImg(postId, postImgId);
     }
 
     // 실종된 반려동물을 찾아, 완료상태로 변환
-    @PatchMapping("/posts/lost/finalizeCase/{postId}")
-    public void finalizeCase(@PathVariable("postId") Long postId, @AuthenticationPrincipal User user) {
+    @PatchMapping("/posts/lost/finalizeCase/{pet_id}")
+    public void finalizeCase(@PathVariable("pet_id") Long postId, @AuthenticationPrincipal User user) {
         postService.finalizeCase(postId);
     }
 
@@ -72,5 +74,10 @@ public class LostPostController {
     @GetMapping("/posts/lost/search")
     public Page<LostPetsThumbnailResponse> search(SearchCondition condition, Pageable pageable) {
         return postService.findPosts(condition, pageable);
+    }
+
+    @GetMapping("/posts/lost/view/{pet_id}")
+    public LostPetsDetailResponse findById(@PathVariable("pet_id") Long postId) {
+        return postService.getPostDetail(postId);
     }
 }

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SightedPetsThumbnailResponse {
-    private Long id; // sightedPets pk
+    private Long pet_id; // sightedPets pk
 
     private Category category; // 글 카테고리 (실종 / 제보)
     private IsCompleted isCompleted; // 글 상태
@@ -33,16 +33,16 @@ public class SightedPetsThumbnailResponse {
     private BreedGroup breedGroup; // (동물 종류)
     private Breed breed; // 품종
 
-    private String thumbnailImgPath;  // 이미지
+    private String imgUrl;  // 이미지
 
     private Integer views; //조회수
     private Integer totalLike; //좋아요 수
 
     @QueryProjection
-    public SightedPetsThumbnailResponse(Long id, Category category, IsCompleted isCompleted, LocalDateTime foundDate, LocalDateTime createdAt,
+    public SightedPetsThumbnailResponse(Long pet_id, Category category, IsCompleted isCompleted, LocalDateTime foundDate, LocalDateTime createdAt,
                                         String foundPlace, City city, Districts districts, BreedGroup breedGroup, Breed breed,
-                                        String thumbnailImgPath, Integer views, Integer totalLike) {
-        this.id = id;
+                                        String imgUrl, Integer views, Integer totalLike) {
+        this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
         this.foundDate = foundDate;
@@ -52,7 +52,7 @@ public class SightedPetsThumbnailResponse {
         this.districts = districts;
         this.breedGroup = breedGroup;
         this.breed = breed;
-        this.thumbnailImgPath = thumbnailImgPath;
+        this.imgUrl = imgUrl;
         this.views = views;
         this.totalLike = totalLike;
     }

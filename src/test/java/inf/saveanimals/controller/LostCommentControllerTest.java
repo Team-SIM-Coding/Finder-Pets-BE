@@ -121,7 +121,7 @@ class LostCommentControllerTest {
         String json = objectMapper.writeValueAsString(commentCreate);
 
         // When and Then
-        mockMvc.perform(post("/lostPets/{postId}/comments", postId)
+        mockMvc.perform(post("/api/lostPets/{postId}/comments", postId)
                         .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(json))

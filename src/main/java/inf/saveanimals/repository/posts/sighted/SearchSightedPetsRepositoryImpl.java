@@ -42,7 +42,7 @@ public class SearchSightedPetsRepositoryImpl implements SearchSightedPetsReposit
 
         QueryResults<SightedPetsThumbnailResponse> results  = queryFactory.select(
                         new QSightedPetsThumbnailResponse(
-                                sightedPets.id,
+                                sightedPets.id.as("pet_id"),
                                 sightedPets.category,
                                 sightedPets.isCompleted,
                                 sightedPets.foundDate,
@@ -52,7 +52,7 @@ public class SearchSightedPetsRepositoryImpl implements SearchSightedPetsReposit
                                 sightedPets.districts,
                                 sightedPets.breedGroup,
                                 sightedPets.breed,
-                                sightedImg.imgUrl.as("thumbnailImgPath"),
+                                sightedImg.imgUrl.as("imgUrl"),
                                 sightedPets.views,
                                 sightedPets.totalLike
                         ))
@@ -78,7 +78,7 @@ public class SearchSightedPetsRepositoryImpl implements SearchSightedPetsReposit
 
         QueryResults<SightedPetsThumbnailResponse> results  = queryFactory.select(
                         new QSightedPetsThumbnailResponse(
-                                sightedPets.id,
+                                sightedPets.id.as("pet_id"),
                                 sightedPets.category,
                                 sightedPets.isCompleted,
                                 sightedPets.foundDate,
@@ -88,7 +88,7 @@ public class SearchSightedPetsRepositoryImpl implements SearchSightedPetsReposit
                                 sightedPets.districts,
                                 sightedPets.breedGroup,
                                 sightedPets.breed,
-                                sightedImg.imgUrl.as("thumbnailImgPath"),
+                                sightedImg.imgUrl.as("imgUrl"),
                                 sightedPets.views,
                                 sightedPets.totalLike
                         ))

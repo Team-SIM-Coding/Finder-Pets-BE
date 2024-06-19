@@ -9,22 +9,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class LostLikesApiController {
 
     private final LostLikeService likeService;
 
-    @PostMapping("/posts/lost/{lostPetsId}/like")
-    public LikesResponse like(@PathVariable("lostPetsId") Long sightedPetsId, @AuthenticationPrincipal User user) {
+    @PostMapping("/posts/lost/{pet_id}/like")
+    public LikesResponse like(@PathVariable("pet_id") Long sightedPetsId, @AuthenticationPrincipal User user) {
 
         Integer totalLikes = likeService.insert(sightedPetsId, user);
 
         return LikesResponse.of("좋아요 누르기 성공", totalLikes);
     }
 
-    @DeleteMapping("/posts/lost/{lostPetsId}/like")
-    public void deleteLike(@PathVariable("lostPetsId") Long sightedPetsId, @AuthenticationPrincipal User user) {
+    @DeleteMapping("/posts/lost/{pet_id}/like")
+    public void deleteLike(@PathVariable("pet_id") Long sightedPetsId, @AuthenticationPrincipal User user) {
         likeService.delete(sightedPetsId, user);
     }
 }

@@ -156,7 +156,7 @@ public class LostPets {
 
     public LostPetsDetailResponse toMissingPostDetailResponse() {
         return LostPetsDetailResponse.builder()
-                .id(id)
+                .pet_id(id)
                 .category(category)
                 .isCompleted(isCompleted)
                 .writerNickname(writerNickname)
