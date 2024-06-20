@@ -159,7 +159,7 @@ public class LostPets {
                 .pet_id(id)
                 .category(category)
                 .isCompleted(isCompleted)
-                .writerNickname(writerNickname)
+                .name(writerNickname)
                 .writerProfileImage(writerProfileImage)
                 .lostDate(lostDate)
                 .createdAt(createdAt)

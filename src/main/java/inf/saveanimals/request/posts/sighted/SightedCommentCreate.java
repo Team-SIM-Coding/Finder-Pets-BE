@@ -28,7 +28,7 @@ public class SightedCommentCreate {
 
     public SightedComments toEntity(User user) {
         return SightedComments.builder()
-                .user_nickname(user.getNickname())
+                .user_nickname(user.getName())
                 .user_image(user.getImg())
                 .content(content)
                 .build();

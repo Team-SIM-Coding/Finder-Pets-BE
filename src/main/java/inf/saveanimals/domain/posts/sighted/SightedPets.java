@@ -163,7 +163,7 @@ public class SightedPets {
                 .pet_id(id)
                 .category(category)
                 .isCompleted(isCompleted)
-                .writerNickname(writerNickname)
+                .name(writerNickname)
                 .writerProfileImage(writerProfileImage)
                 .foundDate(foundDate)
                 .createdAt(createdAt)

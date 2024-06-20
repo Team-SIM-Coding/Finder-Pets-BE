@@ -28,7 +28,7 @@ public class LostCommentCreate {
 
     public LostComments toEntity(User user) {
         return LostComments.builder()
-                .user_nickname(user.getNickname())
+                .user_nickname(user.getName())
                 .user_image(user.getImg())
                 .content(content)
                 .build();

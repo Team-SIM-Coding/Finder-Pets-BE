@@ -27,7 +27,7 @@ public class LostPetsDetailResponse {
     private IsCompleted isCompleted; // 글 상태
 
    // 작성자 정보
-    private String writerNickname; // 작성자 닉네임
+    private String name; // 작성자 닉네임
     private String writerProfileImage; // 작성자 프로필
 
     // 작성 시간
@@ -63,7 +63,7 @@ public class LostPetsDetailResponse {
     @QueryProjection
     @Builder
     public LostPetsDetailResponse(Long pet_id, Category category, IsCompleted isCompleted,
-                                  String writerNickname, String writerProfileImage,
+                                  String name, String writerProfileImage,
                                   LocalDateTime lostDate, LocalDateTime createdAt,
                                   Breed breed, BreedGroup breedGroup, Gender gender, String weight, String color, String age,
                                   NeuteringStatus neuteringStatus, String specialMark, String petOwnerTel,
@@ -72,7 +72,7 @@ public class LostPetsDetailResponse {
         this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
-        this.writerNickname = writerNickname;
+        this.name = name;
         this.writerProfileImage = writerProfileImage;
         this.lostDate = lostDate;
         this.createdAt = createdAt;

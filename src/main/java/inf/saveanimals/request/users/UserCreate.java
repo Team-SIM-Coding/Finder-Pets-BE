@@ -6,31 +6,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 public class UserCreate {
 
-    private String nickname;
+    private String name;
     private String password;
     private String passwordCheck;
     private String email;
 
     @Builder
-    public UserCreate(String email, String password, String passwordCheck, String nickname) {
+    public UserCreate(String email, String password, String passwordCheck, String name) {
         this.email = email;
         this.password = password;
         this.passwordCheck = passwordCheck;
-        this.nickname = nickname;
+        this.name = name;
     }
 
     public User ofEntity() {
         return User.builder()
                 .email(this.getEmail())
                 .password(this.getPassword())
-                .nickname(this.getNickname())
+                .name(this.getName())
                 .build();
     }
 }

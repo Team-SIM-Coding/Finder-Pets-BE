@@ -8,13 +8,10 @@ import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.common.IsMainImg;
-import inf.saveanimals.domain.posts.lost.QLostPets;
 import inf.saveanimals.domain.posts.sighted.QSightedImg;
 import inf.saveanimals.domain.posts.sighted.QSightedPets;
-import inf.saveanimals.repository.posts.lost.SearchLostPetsRepository;
 import inf.saveanimals.request.posts.SearchCondition;
-import inf.saveanimals.response.posts.lostPets.LostPetsThumbnailResponse;
-import inf.saveanimals.response.posts.lostPets.QLostPetsThumbnailResponse;
+
 import inf.saveanimals.response.posts.sightedPets.QSightedPetsThumbnailResponse;
 import inf.saveanimals.response.posts.sightedPets.SightedPetsThumbnailResponse;
 import jakarta.persistence.EntityManager;
