@@ -58,7 +58,7 @@ public class UserService {
     public LoginUserResponse signUp(UserCreate dto) {
 
         isExistUserEmail(dto.getEmail());
-        checkPassword(dto.getPassword(), dto.getPasswordCheck());
+       // checkPassword(dto.getPassword(), dto.getPasswordCheck());
 
         // 패스워드 암호화
         String encodePwd = encoder.encode(dto.getPassword());

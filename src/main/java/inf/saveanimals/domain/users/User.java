@@ -53,11 +53,12 @@ public class User implements UserDetails {
     private List<MyPets> myPetsList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String userTel) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.userLevel = UserLevel.USER;
+        this.userTel = userTel;
       //  this.img = "https://storage.googleapis.com/java-board-bucket/defaultImg.jpg";
     }
 

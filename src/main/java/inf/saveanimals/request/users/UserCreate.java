@@ -13,15 +13,17 @@ public class UserCreate {
 
     private String name;
     private String password;
-    private String passwordCheck;
+  //  private String passwordCheck;
     private String email;
+    private String phone;
 
     @Builder
-    public UserCreate(String email, String password, String passwordCheck, String name) {
+    public UserCreate(String email, String password, String name, String phone) {
         this.email = email;
         this.password = password;
-        this.passwordCheck = passwordCheck;
+     //   this.passwordCheck = password;
         this.name = name;
+        this.phone = phone;
     }
 
     public User ofEntity() {
@@ -29,6 +31,7 @@ public class UserCreate {
                 .email(this.getEmail())
                 .password(this.getPassword())
                 .name(this.getName())
+                .userTel(this.getPhone())
                 .build();
     }
 }
