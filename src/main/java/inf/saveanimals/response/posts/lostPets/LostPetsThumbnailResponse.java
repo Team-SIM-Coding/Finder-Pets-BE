@@ -21,37 +21,37 @@ public class LostPetsThumbnailResponse {
     private IsCompleted isCompleted; // 글 상태
 
     // --실종동물 등록 시 정보 입력--
-    private Breed breed; // 품종
-    private BreedGroup breedGroup; // 동물 종류
+    private Breed kind; // 품종
+    private BreedGroup animal; // 동물 종류
 
     private Gender gender; // 성별
     private String weight; // 몸무게
-    private String specialMark; // 특징
-    private String happenPlace; // 잃어버린 장소
+    private String character; // 특징
+    private String area; // 잃어버린 장소
 
 
     // 이미지
-    private String imgUrl;
+    private String img_url;
 
     private Integer views; //조회수
-    private Integer totalLike; //좋아요 수
+    private Integer total_like; //좋아요 수
 
     @QueryProjection
     public LostPetsThumbnailResponse(Long pet_id, Category category, IsCompleted isCompleted,
-                                     Breed breed, BreedGroup breedGroup, Gender gender,
-                                     String weight, String specialMark, String happenPlace,
-                                     String imgUrl, Integer views, Integer totalLike) {
+                                     Breed kind, BreedGroup animal, Gender gender,
+                                     String weight, String character, String area,
+                                     String img_url, Integer views, Integer total_like) {
         this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
-        this.breed = breed;
-        this.breedGroup = breedGroup;
+        this.kind = kind;
+        this.animal = animal;
         this.gender = gender;
         this.weight = weight;
-        this.specialMark = specialMark;
-        this.happenPlace = happenPlace;
-        this.imgUrl = imgUrl;
+        this.character = character;
+        this.area = area;
+        this.img_url = img_url;
         this.views = views;
-        this.totalLike = totalLike;
+        this.total_like = total_like;
     }
 }

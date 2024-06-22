@@ -19,18 +19,18 @@ public class SightedCommentCreate {
     private String user_image; // 작성자 프로필
 
 
-    private String content; // 내용
+    private String comment; // 내용
 
     @Builder
-    public SightedCommentCreate( String content) {
-        this.content = content;
+    public SightedCommentCreate( String comment) {
+        this.comment = comment;
     }
 
     public SightedComments toEntity(User user) {
         return SightedComments.builder()
                 .user_nickname(user.getName())
                 .user_image(user.getImg())
-                .content(content)
+                .content(comment)
                 .build();
     }
 }

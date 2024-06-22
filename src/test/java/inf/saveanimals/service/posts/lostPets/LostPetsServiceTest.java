@@ -15,9 +15,7 @@ import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.posts.lost.LostPetsCreate;
 
 import inf.saveanimals.request.posts.lost.LostPetsEdit;
-import inf.saveanimals.service.posts.lostPets.LostPetsService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -74,19 +72,19 @@ class LostPetsServiceTest {
         User savedUser = userRepository.save(user);
 
         LostPetsCreate postCreate = LostPetsCreate.builder()
-                .breed(Breed.AKITA)
-                .breedGroup(BreedGroup.DOG)
+                .kind(Breed.AKITA)
+                .animal(BreedGroup.DOG)
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .specialMark("파란색목줄착용, 겁이많음,진드기")
-                .petOwnerTel("123-123")
-                .happenPlace("공주시 우금티터널")
+                .is_neutering(NeuteringStatus.Y)
+                .character("파란색목줄착용, 겁이많음,진드기")
+                .phone("123-123")
+                .area("공주시 우금티터널")
                 .city(City.GONGJU_SI)
                 .districts(Districts.CHUNGCHEONGNAM_CITY)
-                .lostDate(LocalDateTime.now())
+                .date(LocalDateTime.now())
                 .latitude("123")
                 .longitude("123")
                 .build();
@@ -117,15 +115,15 @@ class LostPetsServiceTest {
         userRepository.save(user);
 
         LostPetsCreate postCreate = LostPetsCreate.builder()
-                .breed(Breed.AKITA)
+                .kind(Breed.AKITA)
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .specialMark("파란색목줄착용, 겁이많음,진드기")
-                .petOwnerTel("123-123")
-                .happenPlace("공주시 우금티터널")
+                .is_neutering(NeuteringStatus.Y)
+                .character("파란색목줄착용, 겁이많음,진드기")
+                .phone("123-123")
+                .area("공주시 우금티터널")
                 .city(City.GONGJU_SI)
                 .districts(Districts.CHUNGCHEONGNAM_CITY)
                 .build();
@@ -136,7 +134,7 @@ class LostPetsServiceTest {
 
 
         LostPetsEdit postEdit = LostPetsEdit.builder()
-                .specialMark("귀쫑긋")
+                .character("귀쫑긋")
                 .build();
 
         // when
@@ -161,15 +159,15 @@ class LostPetsServiceTest {
         userRepository.save(user);
 
         LostPetsCreate postCreate = LostPetsCreate.builder()
-                .breed(Breed.AKITA)
+                .kind(Breed.AKITA)
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .specialMark("파란색목줄착용, 겁이많음,진드기")
-                .petOwnerTel("123-123")
-                .happenPlace("공주시 우금티터널")
+                .is_neutering(NeuteringStatus.Y)
+                .character("파란색목줄착용, 겁이많음,진드기")
+                .phone("123-123")
+                .area("공주시 우금티터널")
                 .city(City.GONGJU_SI)
                 .districts(Districts.CHUNGCHEONGNAM_CITY)
                 .build();

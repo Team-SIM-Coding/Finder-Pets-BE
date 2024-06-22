@@ -18,11 +18,11 @@ public class LostCommentCreate {
     private String user_nickname; // 작성자 닉네임
     private String user_image; // 작성자 프로필
 
-    private String content; // 내용
+    private String comment; // 내용
 
     @Builder
-    public LostCommentCreate(String content) {
-        this.content = content;
+    public LostCommentCreate(String comment) {
+        this.comment = comment;
     }
 
 
@@ -30,7 +30,7 @@ public class LostCommentCreate {
         return LostComments.builder()
                 .user_nickname(user.getName())
                 .user_image(user.getImg())
-                .content(content)
+                .content(comment)
                 .build();
     }
 

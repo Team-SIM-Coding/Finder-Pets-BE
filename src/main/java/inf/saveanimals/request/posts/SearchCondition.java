@@ -19,8 +19,8 @@ public class SearchCondition {
 
     private String keyword;
 
-    private BreedGroup breedGroup;
-    private Breed breed;
+    private BreedGroup animal;
+    private Breed kind;
 
     private long viewCount; //조회수
     private long likeCount; //좋아요 수

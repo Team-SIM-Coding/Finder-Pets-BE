@@ -9,7 +9,6 @@ import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
-import inf.saveanimals.domain.posts.lost.LostComments;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.exception.ImageNotFound;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
@@ -95,6 +94,8 @@ public class SightedPets {
     @Column(name = "total_like", nullable = false)
     private Integer totalLike; // 좋아요 수
 
+    private String detailed; // 본문
+
     // 이미지
     @JsonIgnore
     @OneToMany(mappedBy = "sightedPets", cascade = CascadeType.ALL)
@@ -111,13 +112,13 @@ public class SightedPets {
     public SightedPets(Breed breed, BreedGroup breedGroup, Gender gender,
                        String weight, String color, String age, NeuteringStatus neuteringStatus, String specialMark,
                        String reporterTel, City city, Districts districts, LocalDateTime foundDate, String foundPlace,
-                       String latitude, String longitude, User user) {
+                       String latitude, String longitude, String detailed, User user) {
         this.views = 0;
         this.totalLike = 0;
         this.isCompleted = IsCompleted.UNRESOLVED;
         this.category = Category.MISSING;
         this.createdAt = LocalDateTime.now();
-        this.writerNickname = user.getNickname();
+        this.writerNickname = user.getName();
         this.writerProfileImage = user.getImg();
         this.breed = breed;
         this.breedGroup = breedGroup;
@@ -134,26 +135,28 @@ public class SightedPets {
         this.foundPlace = foundPlace;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.detailed = detailed;
         this.user = user;
     }
 
 
     public void update(SightedPetsEdit postEdit) {
-        this.breed = postEdit.getBreed();
-        this.breedGroup = searchBreedGroup(postEdit.getBreed());
+        this.breed = postEdit.getKind();
+        this.breedGroup = searchBreedGroup(postEdit.getKind());
         this.gender = postEdit.getGender();
         this.weight = postEdit.getWeight();
         this.color = postEdit.getColor();
         this.age = postEdit.getAge();
-        this.neuteringStatus = postEdit.getNeuteringStatus();
-        this.specialMark = postEdit.getSpecialMark();
-        this.reporterTel = postEdit.getReporterTel();
-        this.foundPlace = postEdit.getFoundPlace();
-        this.foundDate = postEdit.getFoundDate();
+        this.neuteringStatus = postEdit.getIs_neutering();
+        this.specialMark = postEdit.getCharacter();
+        this.reporterTel = postEdit.getPhone();
+        this.foundPlace = postEdit.getArea();
+        this.foundDate = postEdit.getDate();
         this.city = postEdit.getCity();
         this.districts = postEdit.getDistricts();
         this.longitude = postEdit.getLongitude();
         this.latitude = postEdit.getLatitude();
+        this.detailed = postEdit.getDetailed();
     }
 
 

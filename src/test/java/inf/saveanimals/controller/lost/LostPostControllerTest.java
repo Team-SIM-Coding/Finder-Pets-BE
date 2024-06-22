@@ -138,17 +138,18 @@ class LostPostControllerTest {
 
     private static LostPetsCreate getLostPetsCreate() {
         LostPetsCreate postCreate = LostPetsCreate.builder()
-                .breed(Breed.AKITA)
+                .kind(Breed.AKITA)
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .specialMark("파란색목줄착용, 겁이많음,진드기")
-                .petOwnerTel("123-123")
-                .happenPlace("공주시 우금티터널")
+                .is_neutering(NeuteringStatus.Y)
+                .character("파란색목줄착용, 겁이많음,진드기")
+                .phone("123-123")
+                .area("공주시 우금티터널")
                 .city(City.GONGJU_SI)
                 .districts(Districts.CHUNGCHEONGNAM_CITY)
+                .detailed("상세하게")
                 .build();
 
         return postCreate;

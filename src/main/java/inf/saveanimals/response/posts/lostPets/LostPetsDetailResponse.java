@@ -28,70 +28,73 @@ public class LostPetsDetailResponse {
 
    // 작성자 정보
     private String name; // 작성자 닉네임
-    private String writerProfileImage; // 작성자 프로필
+    private String profile_image; // 작성자 프로필
 
     // 작성 시간
-    private LocalDateTime lostDate; // 실종 날짜
-    private LocalDateTime createdAt; // 작성 시간
+    private LocalDateTime date; // 실종 날짜
+    private LocalDateTime created_at; // 작성 시간
 
     // 동물 정보
-    private Breed breed; // 품종
-    private BreedGroup breedGroup; // 동물 종류
+    private Breed kind; // 품종
+    private BreedGroup animal; // 동물 종류
     private Gender gender; // 성별
     private String weight; // 몸무게
     private String color; //색상
     private String age; // 나이
-    private NeuteringStatus neuteringStatus; // 중성화 여부
-    private String specialMark; // 특징
-    private String petOwnerTel; // 보호자 연락처
+    private NeuteringStatus is_neutering; // 중성화 여부
+    private String character; // 특징
+    private String phone; // 보호자 연락처
 
 
     // ---위치 정보---
     private City city;
     private Districts districts;
-    private String happenPlace; // 잃어버린 장소
+    private String area; // 잃어버린 장소
     // 지도 api 받고 나서?
     private String latitude; //  잃어버린 장소 - 위도
     private String longitude; // 잃어버린 장소 - 경도
 
     // 이미지
-    private List<String> imgPaths = new ArrayList<>();
+    private List<String> img_url_list = new ArrayList<>();
 
     private Integer views; //조회수
-    private Integer totalLike; //좋아요 수
+    private Integer total_like; //좋아요 수
+
+    private String detailed; // 본문
 
     @QueryProjection
     @Builder
     public LostPetsDetailResponse(Long pet_id, Category category, IsCompleted isCompleted,
-                                  String name, String writerProfileImage,
-                                  LocalDateTime lostDate, LocalDateTime createdAt,
-                                  Breed breed, BreedGroup breedGroup, Gender gender, String weight, String color, String age,
-                                  NeuteringStatus neuteringStatus, String specialMark, String petOwnerTel,
-                                  City city, Districts districts, String happenPlace, String latitude, String longitude,
-                                  List<String> imgPaths, Integer views, Integer totalLike) {
+                                  String name, String profile_image,
+                                  LocalDateTime date, LocalDateTime created_at,
+                                  Breed kind, BreedGroup animal, Gender gender, String weight, String color, String age,
+                                  NeuteringStatus is_neutering, String character, String phone,
+                                  City city, Districts districts, String area, String latitude, String longitude,
+                                  List<String> img_url_list, Integer views, Integer total_like, String detailed) {
         this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
         this.name = name;
-        this.writerProfileImage = writerProfileImage;
-        this.lostDate = lostDate;
-        this.createdAt = createdAt;
-        this.breed = breed;
-        this.breedGroup = breedGroup;
+        this.profile_image = profile_image;
+        this.date = date;
+        this.created_at = created_at;
+        this.kind = kind;
+        this.animal = animal;
         this.gender = gender;
         this.weight = weight;
         this.color = color;
         this.age = age;
-        this.neuteringStatus = neuteringStatus;
-        this.specialMark = specialMark;
-        this.petOwnerTel = petOwnerTel;
+        this.is_neutering = is_neutering;
+        this.character = character;
+        this.phone = phone;
         this.city = city;
         this.districts = districts;
-        this.happenPlace = happenPlace;
+        this.area = area;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.imgPaths = imgPaths;
+        this.img_url_list = img_url_list;
         this.views = views;
-        this.totalLike = totalLike;
+        this.total_like = total_like;
+        this.detailed = detailed;
     }
 }

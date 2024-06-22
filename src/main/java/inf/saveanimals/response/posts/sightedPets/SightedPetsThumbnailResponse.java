@@ -23,37 +23,37 @@ public class SightedPetsThumbnailResponse {
     private Category category; // 글 카테고리 (실종 / 제보)
     private IsCompleted isCompleted; // 글 상태
 
-    private LocalDateTime foundDate; // 목격한 날짜
-    private LocalDateTime createdAt; // 작성 시간
-    private String foundPlace; // 발견된 장소
+    private LocalDateTime date; // 목격한 날짜
+    private LocalDateTime created_at; // 작성 시간
+    private String area; // 발견된 장소
 
     private City city;
     private Districts districts;
 
-    private BreedGroup breedGroup; // (동물 종류)
-    private Breed breed; // 품종
+    private BreedGroup animal; // (동물 종류)
+    private Breed kind; // 품종
 
-    private String imgUrl;  // 이미지
+    private String img_url;  // 이미지
 
     private Integer views; //조회수
-    private Integer totalLike; //좋아요 수
+    private Integer total_like; //좋아요 수
 
     @QueryProjection
-    public SightedPetsThumbnailResponse(Long pet_id, Category category, IsCompleted isCompleted, LocalDateTime foundDate, LocalDateTime createdAt,
-                                        String foundPlace, City city, Districts districts, BreedGroup breedGroup, Breed breed,
-                                        String imgUrl, Integer views, Integer totalLike) {
+    public SightedPetsThumbnailResponse(Long pet_id, Category category, IsCompleted isCompleted, LocalDateTime date, LocalDateTime created_at,
+                                        String area, City city, Districts districts, BreedGroup animal, Breed kind,
+                                        String img_url, Integer views, Integer total_like) {
         this.pet_id = pet_id;
         this.category = category;
         this.isCompleted = isCompleted;
-        this.foundDate = foundDate;
-        this.createdAt = createdAt;
-        this.foundPlace = foundPlace;
+        this.date = date;
+        this.created_at = created_at;
+        this.area = area;
         this.city = city;
         this.districts = districts;
-        this.breedGroup = breedGroup;
-        this.breed = breed;
-        this.imgUrl = imgUrl;
+        this.animal = animal;
+        this.kind = kind;
+        this.img_url = img_url;
         this.views = views;
-        this.totalLike = totalLike;
+        this.total_like = total_like;
     }
 }

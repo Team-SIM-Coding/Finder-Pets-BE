@@ -98,15 +98,15 @@ class LostCommentControllerTest {
         UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
 
         LostPetsCreate postCreate = LostPetsCreate.builder()
-                .breed(Breed.AKITA)
+                .kind(Breed.AKITA)
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .specialMark("파란색목줄착용, 겁이많음,진드기")
-                .petOwnerTel("123-123")
-                .happenPlace("공주시 우금티터널")
+                .is_neutering(NeuteringStatus.Y)
+                .character("파란색목줄착용, 겁이많음,진드기")
+                .phone("123-123")
+                .area("공주시 우금티터널")
                 .build();
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
@@ -114,7 +114,7 @@ class LostCommentControllerTest {
 
 
         LostCommentCreate commentCreate = LostCommentCreate.builder()
-                .content("댓글입니다. 안녕하세요.")
+                .comment("댓글입니다. 안녕하세요.")
                 .build();
 
 

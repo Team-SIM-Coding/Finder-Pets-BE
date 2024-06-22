@@ -38,6 +38,8 @@ public class QLostPets extends EntityPathBase<LostPets> {
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
+    public final StringPath detailed = createString("detailed");
+
     public final EnumPath<inf.saveanimals.domain.areas.Districts> districts = createEnum("districts", inf.saveanimals.domain.areas.Districts.class);
 
     public final EnumPath<inf.saveanimals.domain.animals.common.Gender> gender = createEnum("gender", inf.saveanimals.domain.animals.common.Gender.class);

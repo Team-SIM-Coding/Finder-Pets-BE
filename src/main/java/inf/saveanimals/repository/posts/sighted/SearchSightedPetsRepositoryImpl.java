@@ -42,22 +42,22 @@ public class SearchSightedPetsRepositoryImpl implements SearchSightedPetsReposit
                                 sightedPets.id.as("pet_id"),
                                 sightedPets.category,
                                 sightedPets.isCompleted,
-                                sightedPets.foundDate,
-                                sightedPets.createdAt,
-                                sightedPets.foundPlace,
+                                sightedPets.foundDate.as("date"),
+                                sightedPets.createdAt.as("created_at"),
+                                sightedPets.foundPlace.as("area"),
                                 sightedPets.city,
                                 sightedPets.districts,
-                                sightedPets.breedGroup,
-                                sightedPets.breed,
-                                sightedImg.imgUrl.as("imgUrl"),
+                                sightedPets.breedGroup.as("animal"),
+                                sightedPets.breed.as("kind"),
+                                sightedImg.imgUrl.as("img_url"),
                                 sightedPets.views,
-                                sightedPets.totalLike
+                                sightedPets.totalLike.as("total_like")
                         ))
                 .from(sightedImg)
                 .join(sightedImg.sightedPets, sightedPets)
                 .where(sightedImg.isMainImg.eq(IsMainImg.Y)
-                        .and(eqBreedGroup(searchCondition.getBreedGroup()))
-                        .and(eqBreed(searchCondition.getBreed()))
+                        .and(eqBreedGroup(searchCondition.getAnimal()))
+                        .and(eqBreed(searchCondition.getKind()))
                         .and(eqCity(searchCondition.getCity()))
                         .and(eqDistrict(searchCondition.getDistricts())))
                 .orderBy(sightedPets.id.desc()) // 최신순
@@ -78,16 +78,16 @@ public class SearchSightedPetsRepositoryImpl implements SearchSightedPetsReposit
                                 sightedPets.id.as("pet_id"),
                                 sightedPets.category,
                                 sightedPets.isCompleted,
-                                sightedPets.foundDate,
-                                sightedPets.createdAt,
-                                sightedPets.foundPlace,
+                                sightedPets.foundDate.as("date"),
+                                sightedPets.createdAt.as("created_at"),
+                                sightedPets.foundPlace.as("area"),
                                 sightedPets.city,
                                 sightedPets.districts,
-                                sightedPets.breedGroup,
-                                sightedPets.breed,
-                                sightedImg.imgUrl.as("imgUrl"),
+                                sightedPets.breedGroup.as("animal"),
+                                sightedPets.breed.as("kind"),
+                                sightedImg.imgUrl.as("img_url"),
                                 sightedPets.views,
-                                sightedPets.totalLike
+                                sightedPets.totalLike.as("total_like")
                         ))
                 .from(sightedImg)
                 .join(sightedImg.sightedPets, sightedPets)

@@ -6,12 +6,8 @@ import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
 import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
-import inf.saveanimals.domain.posts.common.Category;
-import inf.saveanimals.domain.posts.common.IsCompleted;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -24,68 +20,72 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SightedPetsCreate {
 
-    private Breed breed; // 품종
-    private BreedGroup breedGroup;
+    private Breed kind; // 품종
+    private BreedGroup animal;
 
     private Gender gender; // 성별
     private String weight; // 몸무게
     private String color; //색상
     private String age; // 나이
-    private NeuteringStatus neuteringStatus; // 중성화 여부
+    private NeuteringStatus is_neutering; // 중성화 여부
 
-    private String specialMark; // 상세 설명 (내용 입력칸)
-    private String reporterTel; // 제보자 연락처
-    private String foundPlace; // 발견된 장소
+    private String character; // 상세 설명 (내용 입력칸)
+    private String phone; // 제보자 연락처
+    private String area; // 발견된 장소
 
     private City city;
     private Districts districts;
 
-    private LocalDateTime foundDate; // 목격한 날짜
+    private LocalDateTime date; // 목격한 날짜
 
     // 지도로 받은 정보
     private String latitude;  // 장소 - 위도
     private String longitude; // 장소 - 경도
 
+    private String detailed;
+
     @Builder
-    public SightedPetsCreate(Breed breed, BreedGroup breedGroup, Gender gender,
-                             String weight, String color, String age, NeuteringStatus neuteringStatus,
-                             String specialMark, String reporterTel, String foundPlace,
-                             City city, Districts districts, LocalDateTime foundDate, String latitude, String longitude) {
-        this.breed = breed;
-        this.breedGroup = breedGroup;
+    public SightedPetsCreate(Breed kind, BreedGroup animal, Gender gender,
+                             String weight, String color, String age, NeuteringStatus is_neutering,
+                             String character, String phone, String area,
+                             City city, Districts districts, LocalDateTime date, String latitude, String longitude, String detailed) {
+        this.kind = kind;
+        this.animal = animal;
         this.gender = gender;
         this.weight = weight;
         this.color = color;
         this.age = age;
-        this.neuteringStatus = neuteringStatus;
-        this.specialMark = specialMark;
-        this.reporterTel = reporterTel;
-        this.foundPlace = foundPlace;
+        this.is_neutering = is_neutering;
+        this.character = character;
+        this.phone = phone;
+        this.area = area;
         this.city = city;
         this.districts = districts;
-        this.foundDate = foundDate;
+        this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.detailed = detailed;
     }
 
 
     public SightedPets toEntity(User user) {
         return SightedPets.builder()
-                .breed(breed)
-                .breedGroup(breedGroup)
+                .breed(kind)
+                .breedGroup(animal)
                 .gender(gender)
                 .weight(weight)
                 .color(color)
                 .age(age)
-                .neuteringStatus(neuteringStatus)
-                .specialMark(specialMark)
-                .reporterTel(reporterTel)
+                .neuteringStatus(is_neutering)
+                .specialMark(character)
+                .reporterTel(phone)
                 .city(city)
                 .districts(districts)
-                .foundDate(foundDate)
-                .foundPlace(foundPlace)
+                .foundDate(date)
+                .foundPlace(area)
                 .latitude(latitude)
                 .longitude(longitude)
+                .detailed(detailed)
                 .user(user)
                 .build();
     }

@@ -19,7 +19,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class LostPets {
 
     private String specialMark; // 특징
     private String petOwnerTel; // 보호자 연락처
-
+    private String detailed; // 본문
 
     /**
      * 만약, 위치정보를 (시/구)를 받을 경우로 가정하
@@ -108,13 +107,13 @@ public class LostPets {
     @Builder
     public LostPets(Breed breed, BreedGroup breedGroup, Gender gender, String weight, String color, String age,
                     NeuteringStatus neuteringStatus, String specialMark, String petOwnerTel,
-                    City city, Districts districts, LocalDateTime lostDate, String happenPlace, String latitude, String longitude, User user) {
+                    City city, Districts districts, LocalDateTime lostDate, String happenPlace, String latitude, String longitude, String detailed, User user) {
         this.views = 0;
         this.totalLike = 0;
         this.isCompleted = IsCompleted.UNRESOLVED;
         this.category = Category.MISSING;
         this.createdAt = LocalDateTime.now();
-        this.writerNickname = user.getNickname();
+        this.writerNickname = user.getName();
         this.writerProfileImage = user.getImg();
         this.breed = breed;
         this.breedGroup = breedGroup;
@@ -131,24 +130,24 @@ public class LostPets {
         this.happenPlace = happenPlace;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.detailed = detailed;
         this.user = user;
     }
 
     public void update(LostPetsEdit postEdit) {
-        this.breed = postEdit.getBreed();
-        this.breedGroup = postEdit.getBreedGroup();
+        this.breed = postEdit.getKind();
+        this.breedGroup = postEdit.getAnimal();
         this.gender = postEdit.getGender();
         this.weight = postEdit.getWeight();
         this.color = postEdit.getColor();
         this.age = postEdit.getAge();
-        this.neuteringStatus = postEdit.getNeuteringStatus();
-        this.specialMark = postEdit.getSpecialMark();
-        this.petOwnerTel = postEdit.getPetOwnerTel();
-        this.happenPlace = postEdit.getHappenPlace();
-        this.lostDate = postEdit.getLostDate();
+        this.neuteringStatus = postEdit.getIs_neutering();
+        this.specialMark = postEdit.getCharacter();
+        this.petOwnerTel = postEdit.getPhone();
+        this.happenPlace = postEdit.getArea();
+        this.lostDate = postEdit.getDate();
         this.city = postEdit.getCity();
         this.districts = postEdit.getDistricts();
-        this.lostDate = postEdit.getLostDate();
         this.longitude = postEdit.getLongitude();
         this.latitude = postEdit.getLatitude();
     }
@@ -160,26 +159,27 @@ public class LostPets {
                 .category(category)
                 .isCompleted(isCompleted)
                 .name(writerNickname)
-                .writerProfileImage(writerProfileImage)
-                .lostDate(lostDate)
-                .createdAt(createdAt)
-                .breed(breed)
-                .breedGroup(breedGroup)
+                .profile_image(writerProfileImage)
+                .date(lostDate)
+                .created_at(createdAt)
+                .kind(breed)
+                .animal(breedGroup)
                 .gender(gender)
                 .weight(weight)
                 .color(color)
                 .age(age)
-                .neuteringStatus(neuteringStatus)
-                .specialMark(specialMark)
-                .petOwnerTel(petOwnerTel)
+                .is_neutering(neuteringStatus)
+                .character(specialMark)
+                .phone(petOwnerTel)
                 .city(city)
                 .districts(districts)
-                .happenPlace(happenPlace)
+                .area(happenPlace)
                 .latitude(latitude)
                 .longitude(longitude)
-                .imgPaths(getImgPaths())
+                .img_url_list(getImgPaths())
                 .views(views)
-                .totalLike(totalLike)
+                .total_like(totalLike)
+                .detailed(detailed)
                 .build();
     }
 

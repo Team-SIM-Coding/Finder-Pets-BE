@@ -36,21 +36,21 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
                                 lostPets.id.as("pet_id"),
                                 lostPets.category,
                                 lostPets.isCompleted,
-                                lostPets.breed,
-                                lostPets.breedGroup,
+                                lostPets.breed.as("kind"),
+                                lostPets.breedGroup.as("animal"),
                                 lostPets.gender,
                                 lostPets.weight,
-                                lostPets.specialMark,
-                                lostPets.happenPlace,
-                                lostImg.imgUrl.as("imgUrl"),
+                                lostPets.specialMark.as("character"),
+                                lostPets.happenPlace.as("area"),
+                                lostImg.imgUrl.as("img_url"),
                                 lostPets.views,
-                                lostPets.totalLike
+                                lostPets.totalLike.as("total_like")
                         ))
                 .from(lostImg)
                 .join(lostImg.lostPets, lostPets)
                 .where(lostImg.isMainImg.eq(IsMainImg.Y)
-                        .and(eqBreedGroup(searchCondition.getBreedGroup()))
-                        .and(eqBreed(searchCondition.getBreed()))
+                        .and(eqBreedGroup(searchCondition.getAnimal()))
+                        .and(eqBreed(searchCondition.getKind()))
                         .and(eqCity(searchCondition.getCity()))
                         .and(eqDistrict(searchCondition.getDistricts())))
                 .orderBy(lostPets.id.desc()) // 최신순
@@ -71,15 +71,15 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
                                 lostPets.id.as("pet_id"),
                                 lostPets.category,
                                 lostPets.isCompleted,
-                                lostPets.breed,
-                                lostPets.breedGroup,
+                                lostPets.breed.as("kind"),
+                                lostPets.breedGroup.as("animal"),
                                 lostPets.gender,
                                 lostPets.weight,
-                                lostPets.specialMark,
-                                lostPets.happenPlace,
-                                lostImg.imgUrl.as("imgUrl"),
+                                lostPets.specialMark.as("character"),
+                                lostPets.happenPlace.as("area"),
+                                lostImg.imgUrl.as("img_url"),
                                 lostPets.views,
-                                lostPets.totalLike
+                                lostPets.totalLike.as("total_like")
                         ))
                 .from(lostImg)
                 .join(lostImg.lostPets, lostPets)

@@ -5,19 +5,13 @@ import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
 import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
-import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
-import inf.saveanimals.repository.posts.lost.LostImgRepository;
-import inf.saveanimals.repository.posts.lost.LostPetsRepository;
 import inf.saveanimals.repository.posts.sighted.SightedImgRepository;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
-import inf.saveanimals.request.posts.lost.LostPetsCreate;
-import inf.saveanimals.request.posts.lost.LostPetsEdit;
 import inf.saveanimals.request.posts.sighted.SightedPetsCreate;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
-import inf.saveanimals.service.posts.lostPets.LostPetsService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,20 +65,20 @@ class SightedPetsServiceTest {
         userRepository.save(user);
 
         SightedPetsCreate postCreate = SightedPetsCreate.builder()
-                .foundDate(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
-                .foundPlace("서울특별시 광진구 군자역인근")
+                .date(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
+                .area("서울특별시 광진구 군자역인근")
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .specialMark("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
-                .reporterTel("123-123")
+                .is_neutering(NeuteringStatus.Y)
+                .character("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
+                .phone("123-123")
                 .latitude("45")
                 .longitude("45")
                 .city(City.GWANGJIN_GU)
                 .districts(Districts.SEOUL_CITY)
-                .breed(Breed.SCHNAUZER)
+                .kind(Breed.SCHNAUZER)
                 .build();
 
 
@@ -116,20 +109,20 @@ class SightedPetsServiceTest {
 
         SightedPetsCreate postCreate = SightedPetsCreate.builder()
 
-                .foundDate(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
-                .foundPlace("서울특별시 광진구 군자역인근")
-                .specialMark("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
+                .date(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
+                .area("서울특별시 광진구 군자역인근")
+                .character("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .reporterTel("123-123")
+                .is_neutering(NeuteringStatus.Y)
+                .phone("123-123")
                 .latitude("45")
                 .longitude("45")
                 .city(City.GWANGJIN_GU)
                 .districts(Districts.SEOUL_CITY)
-                .breed(Breed.SCHNAUZER)
+                .kind(Breed.SCHNAUZER)
                 .build();
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
@@ -138,7 +131,7 @@ class SightedPetsServiceTest {
 
 
         SightedPetsEdit postEdit = SightedPetsEdit.builder()
-                .foundDate(LocalDateTime.of(2023, 6, 6, 15, 30, 45))
+                .date(LocalDateTime.of(2023, 6, 6, 15, 30, 45))
                 .build();
 
         // when
@@ -164,20 +157,20 @@ class SightedPetsServiceTest {
         userRepository.save(user);
 
         SightedPetsCreate postCreate = SightedPetsCreate.builder()
-                .foundDate(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
-                .foundPlace("서울특별시 광진구 군자역인근")
-                .specialMark("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
+                .date(LocalDateTime.of(2023, 6, 7, 15, 30, 45))
+                .area("서울특별시 광진구 군자역인근")
+                .character("노견이라 매우 말랐고 인지능력이 떨어져요. 피부병도 조금")
                 .gender(Gender.FEMALE)
                 .weight("10살")
                 .color("black")
                 .age("19(년생)")
-                .neuteringStatus(NeuteringStatus.Y)
-                .reporterTel("123-123")
+                .is_neutering(NeuteringStatus.Y)
+                .phone("123-123")
                 .latitude("45")
                 .longitude("45")
                 .city(City.GWANGJIN_GU)
                 .districts(Districts.SEOUL_CITY)
-                .breed(Breed.SCHNAUZER)
+                .kind(Breed.SCHNAUZER)
                 .build();
 
         List<MultipartFile> multipartFileList = generateMultipartFileList();
