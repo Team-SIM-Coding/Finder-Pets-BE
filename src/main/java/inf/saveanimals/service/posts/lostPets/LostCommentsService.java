@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 실종- 댓글 서비스
  */
@@ -47,5 +49,11 @@ public class LostCommentsService {
                 .orElseThrow(CommentNotFound::new);
 
         commentsRepository.delete(comment);
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<LostComments> getCommentsByLostPetsId(Long lostPetsId) {
+        return commentsRepository.findByLostPetsId(lostPetsId);
     }
 }

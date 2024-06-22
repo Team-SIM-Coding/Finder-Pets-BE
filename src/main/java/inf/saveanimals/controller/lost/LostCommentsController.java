@@ -21,8 +21,8 @@ public class LostCommentsController {
         commentsService.write(postId, request, user);
     }
 
-    @DeleteMapping("/lostPets/comments/{commentId}")
-    public void delete(@PathVariable("commentId") Long commentId, @AuthenticationPrincipal User user) {
+    @DeleteMapping("/lostPets/comments/{comment_id}")
+    public void delete(@PathVariable("comment_id") Long commentId, @AuthenticationPrincipal User user) {
         commentsService.delete(commentId);
     }
 

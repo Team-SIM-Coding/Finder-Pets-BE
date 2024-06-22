@@ -41,7 +41,7 @@ public class SecurityConfig {
 		return http
 				.httpBasic(httpBasic -> httpBasic.disable())
 				.csrf(csrf -> csrf.disable())
-				.cors(cors -> cors.configurationSource(corsConfigurationSource))
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
 				.authorizeHttpRequests(authorize
 						-> authorize
@@ -63,19 +63,16 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public CorsFilter corsFilter() {
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.addAllowedOrigin("http://local.domain.com:3000"); // Localhost
+		config.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
+		config.addAllowedHeader("*"); // Allow all headers
+		config.setAllowCredentials(true); // Allow credentials
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration config = new CorsConfiguration();
-
-		config.setAllowCredentials(true);
-		//configuration.setAllowedOrigins(Arrays.asList("http://local.domain.com:3000")); // 수정된 부분
-		config.addAllowedOriginPattern("*");
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
 		source.registerCorsConfiguration("/**", config);
-
-		return new CorsFilter(source);
+		return source;
 	}
 
 }

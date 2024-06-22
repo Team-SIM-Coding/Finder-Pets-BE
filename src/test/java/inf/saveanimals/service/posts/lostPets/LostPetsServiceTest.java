@@ -6,12 +6,15 @@ import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
 import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.areas.Districts;
+import inf.saveanimals.domain.posts.lost.LostComments;
 import inf.saveanimals.domain.posts.lost.LostPets;
 
 import inf.saveanimals.domain.users.User;
+import inf.saveanimals.exception.CommentNotFound;
 import inf.saveanimals.repository.posts.lost.LostImgRepository;
 import inf.saveanimals.repository.posts.lost.LostPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
+import inf.saveanimals.request.posts.lost.LostCommentCreate;
 import inf.saveanimals.request.posts.lost.LostPetsCreate;
 
 import inf.saveanimals.request.posts.lost.LostPetsEdit;
@@ -51,11 +54,17 @@ class LostPetsServiceTest {
     @Autowired
     private LostImgRepository imgRepository;
 
+    @Autowired
+    private LostCommentsService commentsService;
+
+    /*
     @BeforeEach
     void clean() {
         lostPetsRepository.deleteAll();
         userRepository.deleteAll();
     }
+
+     */
 
 
     @Test
@@ -185,6 +194,63 @@ class LostPetsServiceTest {
     }
 
 
+    @DisplayName("댓글 조회")
+    @Test
+    void search_comments_success() throws IOException {
+        //given
+        User user = User.test()
+                .name("none")
+                .email("none1234@gmail.com")
+                .password("1234")
+                .img("/imgpath")
+                .nickname("ningning")
+                .build();
+        User savedUser = userRepository.save(user);
+
+        LostPetsCreate postCreate = LostPetsCreate.builder()
+                .kind(Breed.AKITA)
+                .animal(BreedGroup.DOG)
+                .gender(Gender.FEMALE)
+                .weight("10살")
+                .color("black")
+                .age("19(년생)")
+                .is_neutering(NeuteringStatus.Y)
+                .character("파란색목줄착용, 겁이많음,진드기")
+                .phone("123-123")
+                .area("공주시 우금티터널")
+                .city(City.GONGJU_SI)
+                .districts(Districts.CHUNGCHEONGNAM_CITY)
+                .date(LocalDateTime.now())
+                .latitude("123")
+                .longitude("123")
+                .build();
+
+
+        List<MultipartFile> multipartFileList = generateMultipartFileList();
+        Long postId = lostPetsService.write(savedUser, postCreate, multipartFileList);
+
+        // when
+        LostCommentCreate commentCreate = LostCommentCreate.builder()
+                .comment("테스트입니다.")
+                .build();
+
+        LostCommentCreate commentCreate2 = LostCommentCreate.builder()
+                .comment("테스트입니다.22")
+                .build();
+
+        commentsService.write(postId, commentCreate, user);
+        commentsService.write(postId, commentCreate2, user);
+
+        //then
+        List<LostComments> result = commentsService.getCommentsByLostPetsId(postId);
+
+        for (LostComments comments : result) {
+            log.info("comments={}", comments.getContent());
+        }
+
+
+    }
+
     private static List<MultipartFile> generateMultipartFileList() {
         List<MultipartFile> multipartFileList = new ArrayList<>();
 
@@ -198,6 +264,7 @@ class LostPetsServiceTest {
 
         return multipartFileList;
     }
+
 
 
 
