@@ -19,6 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -65,10 +66,12 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.addAllowedOrigin("http://local.domain.com:3000"); // Localhost
+		config.setAllowedOriginPatterns(List.of("http://localhost:[*]", "https://localhost:[*]", "http://*.petcommunity.site:[*]",
+				"https://*.petcommunity.site:[*]")); // Localhost
 		config.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
 		config.addAllowedHeader("*"); // Allow all headers
 		config.setAllowCredentials(true); // Allow credentials
+		config.setMaxAge(3600L);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
