@@ -99,7 +99,7 @@ class LostPostControllerTest {
 
         LostPetsCreate postCreate = getLostPetsCreate();
         MockMultipartFile request = new MockMultipartFile("postCreate", null, "application/json", objectMapper.writeValueAsString(postCreate).getBytes(StandardCharsets.UTF_8));
-;
+
         List<MockMultipartFile> multipartFiles = getMockMultipartFiles();
 
         // when

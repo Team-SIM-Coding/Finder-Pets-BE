@@ -53,7 +53,8 @@ public class SecurityConfig {
 								"/api/posts/sighted/search",
 								"/api/user/checkId",
 								"/api/user/register",
-								"/api/user/login").permitAll()
+								"/api/user/login",
+								"/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
 						.anyRequest().authenticated())
 
 
