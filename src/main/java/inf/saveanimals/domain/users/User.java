@@ -3,6 +3,7 @@ package inf.saveanimals.domain.users;
 import inf.saveanimals.domain.animals.MyPets;
 import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
+import inf.saveanimals.request.users.UserInfoUpdate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,6 +39,10 @@ public class User implements UserDetails {
     private String userTel; // 전화번호
 
     // 관심동물, 관심지역, 관심품종, 자기소개
+    private String like_area;
+    private String like_kind;
+    private String like_animal;
+    private String intro;
 
     @Enumerated(EnumType.STRING)
     protected UserLevel userLevel;
@@ -80,6 +85,13 @@ public class User implements UserDetails {
     public void update(String password, String nickname) {
         this.password = password;
         this.nickname = nickname;
+    }
+
+    public void updateUserInfo(UserInfoUpdate updateDto) {
+        this.like_area = updateDto.getLike_area();
+        this.like_kind = updateDto.getLike_kind();
+        this.like_animal = updateDto.getLike_animal();
+        this.intro = updateDto.getIntro();
     }
 
     //========== UserDetails implements ==========//

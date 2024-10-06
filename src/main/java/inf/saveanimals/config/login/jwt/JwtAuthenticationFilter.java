@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				ex.printStackTrace();
 			} catch (MalformedJwtException ex) {
 				log.info("Invalid JWT !!");
-				System.out.println();
+
 				ex.printStackTrace();
 			} catch (Exception e) {
 				log.info("Unable to get JWT Token !!");

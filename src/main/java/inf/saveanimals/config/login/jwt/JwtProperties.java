@@ -1,12 +1,14 @@
 package inf.saveanimals.config.login.jwt;
 
+import inf.saveanimals.exception.InvalidTokenException;
+import inf.saveanimals.response.users.CreateTokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
+import io.jsonwebtoken.security.SignatureException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +21,9 @@ public class JwtProperties implements Serializable {
 
 	@Value("${jwt.tokenExpirationTime}") private Integer tokenExpirationTime;
 	@Value("${jwt.secret}") private String secret;
+
+	@Value("${jwt.prefix}") private String tokenPrefix;
+
 
 	// extract username from jwt token
 	public String getUsernameFromToken(String token) {
@@ -48,9 +53,12 @@ public class JwtProperties implements Serializable {
 	}
 
 	//generate token for user
-	public String generateToken(UserDetails userDetails) {
+	public CreateTokenResponse generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		return doGenerateToken(claims, userDetails.getUsername());
+		String accessToken = doGenerateToken(claims, userDetails.getUsername());
+		String refreshToken = doGenerateRefreshToken(claims, userDetails.getUsername());
+
+		return new CreateTokenResponse(accessToken, refreshToken, getGrantType());
 	}
 
 	//while creating the token -
@@ -59,7 +67,10 @@ public class JwtProperties implements Serializable {
 	//3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
 	//   compaction of the JWT to a URL-safe string
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
-		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+		return Jwts.builder()
+				.setClaims(claims)
+				.setSubject(subject)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + tokenExpirationTime * 1000))
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
@@ -68,5 +79,37 @@ public class JwtProperties implements Serializable {
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+	}
+
+	//create refresh token
+	public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
+		return Jwts.builder()
+				.setClaims(claims)
+				.setSubject(subject)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + tokenExpirationTime * 1000))
+				.signWith(SignatureAlgorithm.HS512, secret).compact();
+	}
+
+	private String getGrantType() {
+		return tokenPrefix;
+	}
+
+	// accessToken의 남은 시간을 반환
+	public Long getExpiration(String token) {
+
+		try {
+			// accessToken 남은 유효시간
+			Date expiration = getExpirationDateFromToken(token);
+			Long now = new Date().getTime();
+
+			// accessToken 의 현재 남은시간 반환
+			return (expiration.getTime() - now);
+
+		} catch (SignatureException e) {
+			throw new InvalidTokenException();
+		}
+
+
 	}
 }

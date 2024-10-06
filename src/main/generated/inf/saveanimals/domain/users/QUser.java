@@ -26,6 +26,14 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath img = createString("img");
 
+    public final StringPath intro = createString("intro");
+
+    public final StringPath like_animal = createString("like_animal");
+
+    public final StringPath like_area = createString("like_area");
+
+    public final StringPath like_kind = createString("like_kind");
+
     public final ListPath<inf.saveanimals.domain.posts.lost.LostPets, inf.saveanimals.domain.posts.lost.QLostPets> lostPets = this.<inf.saveanimals.domain.posts.lost.LostPets, inf.saveanimals.domain.posts.lost.QLostPets>createList("lostPets", inf.saveanimals.domain.posts.lost.LostPets.class, inf.saveanimals.domain.posts.lost.QLostPets.class, PathInits.DIRECT2);
 
     public final ListPath<inf.saveanimals.domain.animals.MyPets, inf.saveanimals.domain.animals.QMyPets> myPetsList = this.<inf.saveanimals.domain.animals.MyPets, inf.saveanimals.domain.animals.QMyPets>createList("myPetsList", inf.saveanimals.domain.animals.MyPets.class, inf.saveanimals.domain.animals.QMyPets.class, PathInits.DIRECT2);

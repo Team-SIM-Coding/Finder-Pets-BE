@@ -16,19 +16,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class UserTokenDto {
     private String email;
-    private String token;
+
+    private String grantType;
+    private String accessToken;
+    private String refreshToken;
 
     @Builder
-    public UserTokenDto(String email, String token) {
+    public UserTokenDto(String email, String accessToken, String refreshToken, String grantType) {
         this.email = email;
-        this.token = token;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.grantType = grantType;
     }
 
     // Entity -> DTO
-    public static UserTokenDto fromEntity(UserDetails member, String token) {
+    public static UserTokenDto fromEntity(UserDetails member, CreateTokenResponse createTokenResponse) {
         return UserTokenDto.builder()
                 .email(member.getUsername())
-                .token(token)
+                .accessToken(createTokenResponse.getAccessToken())
+                .refreshToken(createTokenResponse.getRefreshToken())
+                .grantType(createTokenResponse.getGrantType())
                 .build();
     }
 }
