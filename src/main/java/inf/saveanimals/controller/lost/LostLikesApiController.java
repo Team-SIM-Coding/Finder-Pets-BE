@@ -2,10 +2,8 @@ package inf.saveanimals.controller.lost;
 
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.response.posts.LikesResponse;
-import inf.saveanimals.service.UserService;
 import inf.saveanimals.service.posts.lostPets.LostLikeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

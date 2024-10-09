@@ -4,33 +4,24 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
 
-import inf.saveanimals.domain.posts.lost.LostComments;
-import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.repository.posts.lost.LostCommentsRepository;
 import inf.saveanimals.repository.posts.lost.LostPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.posts.lost.LostCommentCreate;
 import inf.saveanimals.request.posts.lost.LostPetsCreate;
-import inf.saveanimals.request.users.UserCreate;
-import inf.saveanimals.response.users.LoginUserResponse;
-import inf.saveanimals.service.UserService;
-import inf.saveanimals.service.posts.lostPets.LostCommentsService;
 import inf.saveanimals.service.posts.lostPets.LostPetsService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,16 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc

@@ -1,4 +1,4 @@
-package inf.saveanimals.config;
+package inf.saveanimals.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;

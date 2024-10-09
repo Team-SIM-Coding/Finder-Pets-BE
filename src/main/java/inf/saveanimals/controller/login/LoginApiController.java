@@ -1,72 +1,52 @@
 package inf.saveanimals.controller.login;
 
-import inf.saveanimals.config.login.jwt.JwtProperties;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.request.users.LoginRequest;
 import inf.saveanimals.request.users.UserCreate;
 import inf.saveanimals.request.users.UserEdit;
+import inf.saveanimals.request.users.UserInfoUpdate;
 import inf.saveanimals.response.users.LoginUserResponse;
+import inf.saveanimals.response.users.SignupResponse;
 import inf.saveanimals.response.users.UserInfo;
 import inf.saveanimals.response.users.UserTokenDto;
-import inf.saveanimals.service.UserService;
+import inf.saveanimals.service.users.JwtLoginService;
+import inf.saveanimals.service.users.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class LoginApiController {
 
     private final UserService userService;
-    private final JwtProperties jwtProperties;
+    private final JwtLoginService jwtLoginService;
 
     @GetMapping("/check-id")
-    public ResponseEntity<?> checkIdDuplicate(@RequestParam String email) {
-        userService.checkIdDuplicate(email);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<Boolean> checkIdDuplicate(@RequestParam(name="email") String email) {
+        boolean isDuplicated = userService.checkEmailDuplicate(email);
+        return ResponseEntity.status(HttpStatus.OK).body(isDuplicated);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<LoginUserResponse> register(@RequestBody UserCreate dto) {
-        LoginUserResponse successMember = userService.signUp(dto);
+    public ResponseEntity<SignupResponse> register(@RequestBody UserCreate dto) {
+        SignupResponse successMember = userService.signUp(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(successMember);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserTokenDto> login(@RequestBody LoginRequest dto) {
-        UserTokenDto loginDTO = userService.login(dto);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginDTO.getAccessToken())
-                .header("refreshToken", "Bearer " + loginDTO.getRefreshToken())
-                .body(loginDTO);
+    public ResponseEntity<UserTokenDto> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        UserTokenDto loginDTO = jwtLoginService.login(loginRequest, response);
+        return ResponseEntity.status(HttpStatus.OK).body(loginDTO);
     }
-
-    @PostMapping("/checkPwd")
-    public ResponseEntity<LoginUserResponse> check(
-            @AuthenticationPrincipal User user,
-            @RequestBody Map<String, String> request) {
-        String password = request.get("password");
-        LoginUserResponse memberInfo = userService.check(user, password);
-        return ResponseEntity.status(HttpStatus.OK).body(memberInfo);
-    }
-
-
-    @PutMapping("/update")
-    public ResponseEntity<LoginUserResponse> update(
-            @AuthenticationPrincipal User user,
-            @RequestBody UserEdit dto) {
-        LoginUserResponse memberUpdate = userService.update(user, dto);
-        return ResponseEntity.status(HttpStatus.OK).body(memberUpdate);
-    }
-
 
     @GetMapping("/user")
     public ResponseEntity<UserInfo> getUserInfo(@AuthenticationPrincipal User user) {
@@ -75,20 +55,21 @@ public class LoginApiController {
         return ResponseEntity.status(HttpStatus.OK).body(userInfo);
     }
 
-/*
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String accessToken) {
-        userService.logout(accessToken);
 
-        return new ResponseEntity(HttpStatus.OK);
+    @PatchMapping("/user/register")
+    public ResponseEntity<UserInfo> updateUser(@AuthenticationPrincipal User user, @RequestBody UserInfoUpdate userInfoUpdate) {
+        UserInfo userInfo = userService.updateUserInfo(user, userInfoUpdate);
+        return ResponseEntity.status(HttpStatus.OK).body(userInfo);
     }
- */
+
 
     @DeleteMapping("/user/delete")
-    public ResponseEntity<Void> withdrawUser(@RequestHeader("Authorization") String accessToken) {
-        userService.withdrawUser(accessToken);
+    public ResponseEntity<Void> withdrawUser(@AuthenticationPrincipal User user) {
+        jwtLoginService.withdrawUser(user) ;
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+
 
 }

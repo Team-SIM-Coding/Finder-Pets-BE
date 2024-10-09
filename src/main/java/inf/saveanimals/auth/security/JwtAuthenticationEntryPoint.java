@@ -1,4 +1,4 @@
-package inf.saveanimals.config.login.jwt;
+package inf.saveanimals.auth.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

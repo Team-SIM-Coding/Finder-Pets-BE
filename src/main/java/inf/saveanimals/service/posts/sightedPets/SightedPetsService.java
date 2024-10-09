@@ -6,7 +6,6 @@ import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.exception.PostNotFound;
 import inf.saveanimals.exception.ResourceNotFoundException;
-import inf.saveanimals.exception.UserNotFound;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.posts.CreateImgRequest;
