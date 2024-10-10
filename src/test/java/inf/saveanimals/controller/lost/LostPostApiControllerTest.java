@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.repository.posts.lost.LostImgRepository;
@@ -30,12 +30,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,8 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class LostPostControllerTest {
+class LostPostApiControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -147,9 +141,9 @@ class LostPostControllerTest {
                 .character("파란색목줄착용, 겁이많음,진드기")
                 .phone("123-123")
                 .area("공주시 우금티터널")
-                .city(City.GONGJU_SI)
-                .districts(Districts.CHUNGCHEONGNAM_CITY)
-                .detailed("상세하게")
+                .city(City.CHUNGCHEONGNAM_CITY)
+                .district(District.GONGJU_SI)
+                .description("상세하게")
                 .build();
 
         return postCreate;

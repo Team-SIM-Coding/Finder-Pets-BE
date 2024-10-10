@@ -3,8 +3,9 @@ package inf.saveanimals.response.posts.sightedPets;
 import com.querydsl.core.annotations.QueryProjection;
 import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
 
@@ -27,8 +28,8 @@ public class SightedPetsThumbnailResponse {
     private LocalDateTime created_at; // 작성 시간
     private String area; // 발견된 장소
 
+    private District district;
     private City city;
-    private Districts districts;
 
     private BreedGroup animal; // (동물 종류)
     private Breed kind; // 품종
@@ -40,7 +41,7 @@ public class SightedPetsThumbnailResponse {
 
     @QueryProjection
     public SightedPetsThumbnailResponse(Long pet_id, Category category, IsCompleted isCompleted, LocalDateTime date, LocalDateTime created_at,
-                                        String area, City city, Districts districts, BreedGroup animal, Breed kind,
+                                        String area, District district, City city, BreedGroup animal, Breed kind,
                                         String img_url, Integer views, Integer total_like) {
         this.pet_id = pet_id;
         this.category = category;
@@ -48,8 +49,8 @@ public class SightedPetsThumbnailResponse {
         this.date = date;
         this.created_at = created_at;
         this.area = area;
+        this.district = district;
         this.city = city;
-        this.districts = districts;
         this.animal = animal;
         this.kind = kind;
         this.img_url = img_url;

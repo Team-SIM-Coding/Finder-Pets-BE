@@ -4,8 +4,8 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
 import lombok.*;
@@ -33,8 +33,8 @@ public class SightedPetsCreate {
     private String phone; // 제보자 연락처
     private String area; // 발견된 장소
 
+    private District district;
     private City city;
-    private Districts districts;
 
     private LocalDateTime date; // 목격한 날짜
 
@@ -48,7 +48,7 @@ public class SightedPetsCreate {
     public SightedPetsCreate(Breed kind, BreedGroup animal, Gender gender,
                              String weight, String color, String age, NeuteringStatus is_neutering,
                              String character, String phone, String area,
-                             City city, Districts districts, LocalDateTime date, String latitude, String longitude, String detailed) {
+                             District district, City city, LocalDateTime date, String latitude, String longitude, String detailed) {
         this.kind = kind;
         this.animal = animal;
         this.gender = gender;
@@ -59,8 +59,8 @@ public class SightedPetsCreate {
         this.character = character;
         this.phone = phone;
         this.area = area;
+        this.district = district;
         this.city = city;
-        this.districts = districts;
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -80,7 +80,7 @@ public class SightedPetsCreate {
                 .specialMark(character)
                 .reporterTel(phone)
                 .city(city)
-                .districts(districts)
+                .district(district)
                 .foundDate(date)
                 .foundPlace(area)
                 .latitude(latitude)

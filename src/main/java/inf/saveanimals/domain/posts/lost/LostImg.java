@@ -40,6 +40,11 @@ public class LostImg {
         this.lostPets = lostPets;
     }
 
+
+    public void updateThumbnail() {
+        this.isMainImg = IsMainImg.Y;
+    }
+
     @Override
     public String toString() {
         return "Missing Post Img Info {" + imgUrl + '}';

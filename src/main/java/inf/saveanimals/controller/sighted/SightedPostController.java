@@ -1,16 +1,11 @@
 package inf.saveanimals.controller.sighted;
 
 import inf.saveanimals.domain.users.User;
-import inf.saveanimals.request.posts.SearchCondition;
-import inf.saveanimals.request.posts.lost.LostPetsCreate;
-import inf.saveanimals.request.posts.lost.LostPetsEdit;
+import inf.saveanimals.controller.dto.SearchCondition;
 import inf.saveanimals.request.posts.sighted.SightedPetsCreate;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
-import inf.saveanimals.response.posts.lostPets.LostPetsThumbnailResponse;
 import inf.saveanimals.response.posts.sightedPets.SightedPetsDetailResponse;
 import inf.saveanimals.response.posts.sightedPets.SightedPetsThumbnailResponse;
-import inf.saveanimals.service.posts.lostPets.LostImgService;
-import inf.saveanimals.service.posts.lostPets.LostPetsService;
 import inf.saveanimals.service.posts.sightedPets.SightedImgService;
 import inf.saveanimals.service.posts.sightedPets.SightedPetsService;
 import lombok.RequiredArgsConstructor;
@@ -69,11 +64,6 @@ public class SightedPostController {
     }
 
 
-    // 계정- 등록한 포스팅 페이징 조회
-    @GetMapping("/posts/sighted/myPost")
-    public Page<SightedPetsThumbnailResponse> searchByAccount(@AuthenticationPrincipal User user, Pageable pageable) {
-        return postService.findByAccount(user, pageable);
-    }
 
     // 검색 페이징
     @GetMapping("/posts/sighted/search")

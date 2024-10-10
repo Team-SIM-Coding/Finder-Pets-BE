@@ -8,15 +8,17 @@ import lombok.Getter;
 @Getter
 public enum IsCompleted {
 
-    UNRESOLVED("미해결", "UNRESOLVED"),
-    COMPLETION("완료", "COMPLETION");
+    UNRESOLVED("미해결", "UNRESOLVED", true),
+    COMPLETION("완료", "COMPLETION", false);
 
     private String kCode;
     private String statusCode;
+    private boolean is_completed;
 
-    IsCompleted(String kCode, String statusCode) {
+    IsCompleted(String kCode, String statusCode, boolean is_completed) {
         this.kCode = kCode;
         this.statusCode = statusCode;
+        this.is_completed = is_completed;
     }
 
 

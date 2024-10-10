@@ -3,8 +3,8 @@ package inf.saveanimals.service.posts.sightedPets;
 import inf.saveanimals.domain.posts.common.IsMainImg;
 import inf.saveanimals.domain.posts.sighted.SightedImg;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
-import inf.saveanimals.exception.ImageNotFound;
-import inf.saveanimals.exception.PostNotFound;
+import inf.saveanimals.exception.posts.ImageNotFoundException;
+import inf.saveanimals.exception.posts.PostNotFoundException;
 import inf.saveanimals.repository.posts.sighted.SightedImgRepository;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.request.posts.CreateImgRequest;
@@ -44,10 +44,10 @@ public class SightedImgService {
     // 이미지 삭제
     public void deleteImg(Long postId, Long imgId) {
         SightedImg postImage = imgRepository.findById(imgId)
-                .orElseThrow(ImageNotFound::new);
+                .orElseThrow(ImageNotFoundException::new);
 
         SightedPets postEntity = postRepository.findById(postId)
-                .orElseThrow(PostNotFound::new);
+                .orElseThrow(PostNotFoundException::new);
 
         postEntity.removeImg(postImage);
         imgRepository.delete(postImage); // 연관관계 관리
@@ -56,7 +56,7 @@ public class SightedImgService {
     // 추가로 이미지를 넣고 싶을 때?
     public void addExtraImage(Long postId, List<MultipartFile> fileList) throws IOException {
         SightedPets postEntity = postRepository.findById(postId)
-                .orElseThrow(PostNotFound::new);
+                .orElseThrow(PostNotFoundException::new);
 
 
         for(int i=0; i<fileList.size();i++){

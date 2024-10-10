@@ -1,8 +1,11 @@
 package inf.saveanimals.domain.animals.common;
 
+import lombok.Getter;
+
 /**
  * 동물 성별 데이터
  */
+@Getter
 public enum Gender {
 
     MALE("수컷", "M"),

@@ -5,8 +5,9 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
 import lombok.AccessLevel;
@@ -52,8 +53,8 @@ public class SightedPetsDetailResponse {
 
 
     // ---위치 정보---
+    private District district;
     private City city;
-    private Districts districts;
     private String foundPlace; // 발견된 장소
     // 지도 api 받고 나서?
     private String latitude;  // 장소 - 위도
@@ -71,7 +72,7 @@ public class SightedPetsDetailResponse {
                                      LocalDateTime foundDate, LocalDateTime createdAt, Breed breed, BreedGroup breedGroup,
                                      Gender gender, String weight, String color, String age, NeuteringStatus neuteringStatus,
                                      String specialMark, String reporterTel,
-                                     City city, Districts districts, String foundPlace, String latitude, String longitude,
+                                     District district, City city, String foundPlace, String latitude, String longitude,
                                      List<String> imgPaths, Integer views, Integer totalLike) {
         this.pet_id = pet_id;
         this.category = category;
@@ -89,8 +90,8 @@ public class SightedPetsDetailResponse {
         this.neuteringStatus = neuteringStatus;
         this.specialMark = specialMark;
         this.reporterTel = reporterTel;
+        this.district = district;
         this.city = city;
-        this.districts = districts;
         this.foundPlace = foundPlace;
         this.latitude = latitude;
         this.longitude = longitude;

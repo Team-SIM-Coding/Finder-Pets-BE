@@ -3,8 +3,9 @@ package inf.saveanimals.service.posts.sightedPets;
 import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.repository.posts.sighted.SightedImgRepository;
@@ -76,8 +77,8 @@ class SightedPetsServiceTest {
                 .phone("123-123")
                 .latitude("45")
                 .longitude("45")
-                .city(City.GWANGJIN_GU)
-                .districts(Districts.SEOUL_CITY)
+                .city(City.SEOUL_CITY)
+                .district(District.GWANGJIN_GU)
                 .kind(Breed.SCHNAUZER)
                 .build();
 
@@ -120,8 +121,8 @@ class SightedPetsServiceTest {
                 .phone("123-123")
                 .latitude("45")
                 .longitude("45")
-                .city(City.GWANGJIN_GU)
-                .districts(Districts.SEOUL_CITY)
+                .city(City.SEOUL_CITY)
+                .district(District.GWANGJIN_GU)
                 .kind(Breed.SCHNAUZER)
                 .build();
 
@@ -168,8 +169,8 @@ class SightedPetsServiceTest {
                 .phone("123-123")
                 .latitude("45")
                 .longitude("45")
-                .city(City.GWANGJIN_GU)
-                .districts(Districts.SEOUL_CITY)
+                .city(City.SEOUL_CITY)
+                .district(District.GWANGJIN_GU)
                 .kind(Breed.SCHNAUZER)
                 .build();
 

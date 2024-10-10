@@ -15,5 +15,4 @@ public class UserInfoUpdate {
     private String like_kind;
     private String like_animal;
     private String intro;
-   // private String profile_image;
 }

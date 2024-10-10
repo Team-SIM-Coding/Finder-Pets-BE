@@ -1,4 +1,4 @@
-package inf.saveanimals.exception;
+package inf.saveanimals.exception.users;
 
 
 public class UserNotFoundException extends RuntimeException {

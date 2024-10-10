@@ -4,8 +4,9 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
+import inf.saveanimals.domain.areas.District;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -34,8 +35,8 @@ public class SightedPetsEdit {
     private String area; // 발견 장소
     private LocalDateTime date; // 발견 날짜
 
+    private District district;
     private City city;
-    private Districts districts;
     private String latitude; //  잃어버린 장소 - 위도
     private String longitude; // 잃어버린 장소 - 경도
 

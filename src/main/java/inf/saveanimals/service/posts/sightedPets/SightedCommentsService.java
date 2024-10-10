@@ -1,19 +1,14 @@
 package inf.saveanimals.service.posts.sightedPets;
 
-import inf.saveanimals.domain.posts.lost.LostComments;
-import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.posts.sighted.SightedComments;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
-import inf.saveanimals.exception.CommentNotFound;
-import inf.saveanimals.exception.PostNotFound;
-import inf.saveanimals.exception.ResourceNotFoundException;
-import inf.saveanimals.repository.posts.lost.LostCommentsRepository;
-import inf.saveanimals.repository.posts.lost.LostPetsRepository;
+import inf.saveanimals.exception.posts.CommentNotFoundException;
+import inf.saveanimals.exception.posts.PostNotFoundException;
+import inf.saveanimals.exception.users.UserNotFoundException;
 import inf.saveanimals.repository.posts.sighted.SightedCommentsRepository;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
-import inf.saveanimals.request.posts.lost.LostCommentCreate;
 import inf.saveanimals.request.posts.sighted.SightedCommentCreate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,12 +29,11 @@ public class SightedCommentsService {
 
     // 댓글 달기
     public void write(Long postId, SightedCommentCreate create, User user) {
-        User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
-                () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
-
+        User loginUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 회원입니다."));
 
         SightedPets sightedPets = sightedPetsRepository.findById(postId)
-                .orElseThrow(PostNotFound::new);
+                .orElseThrow(PostNotFoundException::new);
 
         SightedComments comment = commentsRepository.save(create.toEntity(loginUser));
 
@@ -49,7 +43,7 @@ public class SightedCommentsService {
     // 댓글 삭제
     public void delete(Long commentId) {
         SightedComments comment = commentsRepository.findById(commentId)
-                .orElseThrow(CommentNotFound::new);
+                .orElseThrow(CommentNotFoundException::new);
 
         commentsRepository.delete(comment);
     }

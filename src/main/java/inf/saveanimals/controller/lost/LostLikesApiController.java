@@ -14,16 +14,13 @@ public class LostLikesApiController {
 
     private final LostLikeService likeService;
 
-    @PostMapping("/posts/lost/{pet_id}/like")
-    public LikesResponse like(@PathVariable("pet_id") Long sightedPetsId, @AuthenticationPrincipal User user) {
-
-        Integer totalLikes = likeService.insert(sightedPetsId, user);
-
-        return LikesResponse.of("좋아요 누르기 성공", totalLikes);
+    @PostMapping("/post/lost/{pet_id}/like")
+    public void like(@PathVariable("pet_id") Long postId, @AuthenticationPrincipal User user) {
+        likeService.insert(postId, user);
     }
 
-    @DeleteMapping("/posts/lost/{pet_id}/like")
-    public void deleteLike(@PathVariable("pet_id") Long sightedPetsId, @AuthenticationPrincipal User user) {
-        likeService.delete(sightedPetsId, user);
+    @DeleteMapping("/post/lost/{pet_id}/like")
+    public void deleteLike(@PathVariable("pet_id") Long postId, @AuthenticationPrincipal User user) {
+        likeService.delete(postId, user);
     }
 }

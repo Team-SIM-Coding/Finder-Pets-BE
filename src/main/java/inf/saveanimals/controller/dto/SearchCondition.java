@@ -1,9 +1,9 @@
-package inf.saveanimals.request.posts;
+package inf.saveanimals.controller.dto;
 
 import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
 import lombok.*;
 
 /**
@@ -17,14 +17,18 @@ import lombok.*;
 @Builder
 public class SearchCondition {
 
-    private String keyword;
+    //private String keyword;
 
-    private BreedGroup animal;
-    private Breed kind;
+    private BreedGroup kind; // 동물분류
+    private Breed animal; // 품종
 
-    private long viewCount; //조회수
-    private long likeCount; //좋아요 수
+    //private long viewCount; //조회수
+    //private long likeCount; //좋아요 수
 
     private City city;
-    private Districts districts;
+    private District district;
+
+
+
+
 }

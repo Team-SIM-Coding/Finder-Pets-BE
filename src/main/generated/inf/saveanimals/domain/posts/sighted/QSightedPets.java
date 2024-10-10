@@ -40,7 +40,7 @@ public class QSightedPets extends EntityPathBase<SightedPets> {
 
     public final StringPath detailed = createString("detailed");
 
-    public final EnumPath<inf.saveanimals.domain.areas.Districts> districts = createEnum("districts", inf.saveanimals.domain.areas.Districts.class);
+    public final EnumPath<inf.saveanimals.domain.areas.District> district = createEnum("district", inf.saveanimals.domain.areas.District.class);
 
     public final DateTimePath<java.time.LocalDateTime> foundDate = createDateTime("foundDate", java.time.LocalDateTime.class);
 

@@ -3,9 +3,7 @@ package inf.saveanimals.controller.login;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.request.users.LoginRequest;
 import inf.saveanimals.request.users.UserCreate;
-import inf.saveanimals.request.users.UserEdit;
 import inf.saveanimals.request.users.UserInfoUpdate;
-import inf.saveanimals.response.users.LoginUserResponse;
 import inf.saveanimals.response.users.SignupResponse;
 import inf.saveanimals.response.users.UserInfo;
 import inf.saveanimals.response.users.UserTokenDto;
@@ -15,11 +13,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 
 @RestController
@@ -70,6 +71,10 @@ public class LoginApiController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/user/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateProfile(@AuthenticationPrincipal User user, @RequestParam(name = "file") MultipartFile file) throws IOException {
+        userService.updateProfile(user, file);
+    }
 
 
 }

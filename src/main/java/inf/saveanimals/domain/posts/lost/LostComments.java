@@ -1,5 +1,6 @@
 package inf.saveanimals.domain.posts.lost;
 
+import inf.saveanimals.domain.users.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 /**
  * 실종 - 댓글 [테이블]
@@ -28,9 +31,14 @@ public class LostComments {
     private LocalDateTime create_at; // 작성 시간
     private String content; // 내용
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "lost_pets_id")
     private LostPets lostPets;
+
+    @ManyToOne(fetch =  LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     @Builder
     public LostComments(String user_nickname, String user_image, String content) {
@@ -43,5 +51,13 @@ public class LostComments {
 
     public void assignToLostPets(LostPets lostPets) {
         this.lostPets = lostPets;
+    }
+
+    public void assignToUser(User user) {
+        this.user = user;
+    }
+
+    public void update(String message) {
+        this.content = message;
     }
 }

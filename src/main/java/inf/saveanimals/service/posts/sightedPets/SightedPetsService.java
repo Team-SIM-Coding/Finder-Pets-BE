@@ -4,12 +4,12 @@ import inf.saveanimals.domain.posts.common.IsMainImg;
 import inf.saveanimals.domain.posts.sighted.SightedImg;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
-import inf.saveanimals.exception.PostNotFound;
-import inf.saveanimals.exception.ResourceNotFoundException;
+import inf.saveanimals.exception.posts.PostNotFoundException;
+import inf.saveanimals.exception.users.UserNotFoundException;
 import inf.saveanimals.repository.posts.sighted.SightedPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.posts.CreateImgRequest;
-import inf.saveanimals.request.posts.SearchCondition;
+import inf.saveanimals.controller.dto.SearchCondition;
 import inf.saveanimals.request.posts.sighted.SightedPetsCreate;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
 
@@ -42,8 +42,8 @@ public class SightedPetsService {
 
     // 게시글 작성
     public Long write(User user, SightedPetsCreate postDto, List<MultipartFile> fileList) throws IOException {
-        User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
-                () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
+        User loginUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 회원입니다."));
 
         SightedPets savedPost = sightedPetsRepository.save(postDto.toEntity(loginUser));
 
@@ -67,7 +67,7 @@ public class SightedPetsService {
     // 게시글 삭제
     public void deletePost(Long postId) {
         SightedPets sightedPost = sightedPetsRepository.findById(postId)
-                .orElseThrow(PostNotFound::new);
+                .orElseThrow(PostNotFoundException::new);
 
         sightedPetsRepository.delete(sightedPost);
         //  이미지 삭제
@@ -77,7 +77,7 @@ public class SightedPetsService {
     // 게시글 수정
     public void edit(Long postId, SightedPetsEdit postEdit) {
         SightedPets sightedPost = sightedPetsRepository.findById(postId)
-                .orElseThrow(PostNotFound::new);
+                .orElseThrow(PostNotFoundException::new);
 
         sightedPost.update(postEdit);
     }
@@ -85,7 +85,7 @@ public class SightedPetsService {
     // 게시글 상태 - 실종된 반려동물을 찾음 (완료처리)
     public void finalizeCase(Long postId) {
         SightedPets sightedPost = sightedPetsRepository.findById(postId)
-                .orElseThrow(PostNotFound::new);
+                .orElseThrow(PostNotFoundException::new);
 
         sightedPost.finalizeCase();
     }
@@ -99,14 +99,14 @@ public class SightedPetsService {
     @Transactional(readOnly = true)
     public SightedPets findById(Long postId) {
         return sightedPetsRepository.findById(postId)
-                .orElseThrow(PostNotFound::new);
+                .orElseThrow(PostNotFoundException::new);
     }
 
     // 단건 조회
     @Transactional(readOnly = true)
     public SightedPetsDetailResponse getPostDetail(Long postId) {
         return sightedPetsRepository.findById(postId)
-                .orElseThrow(PostNotFound::new)
+                .orElseThrow(PostNotFoundException::new)
                 .toSightedPetsDetailResponse();
     }
 
@@ -122,15 +122,6 @@ public class SightedPetsService {
         return sightedPetsRepository.findAllBySearchCondition(condition, pageable);
     }
 
-
-    // 계정당 포스트 조회
-    @Transactional(readOnly = true)
-    public Page<SightedPetsThumbnailResponse> findByAccount(User user, Pageable pageable) {
-        User loginUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
-                () -> new ResourceNotFoundException("User", "User Email", user.getEmail()));
-
-        return sightedPetsRepository.findAllByAccount(loginUser.getId(), pageable);
-    }
 
 
 

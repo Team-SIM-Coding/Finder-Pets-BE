@@ -5,12 +5,12 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
 import inf.saveanimals.domain.users.User;
-import inf.saveanimals.exception.ImageNotFound;
+import inf.saveanimals.exception.posts.ImageNotFoundException;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
 import inf.saveanimals.response.posts.sightedPets.SightedPetsDetailResponse;
 import jakarta.persistence.*;
@@ -74,10 +74,10 @@ public class SightedPets {
      * 만약, 위치정보를 (시/구)를 받을 경우로 가정하
      */
     @Enumerated(EnumType.STRING)
-    private City city;
+    private District district;
 
     @Enumerated(EnumType.STRING)
-    private Districts districts;
+    private City city;
 
     private LocalDateTime foundDate; // 목격한 날짜
     private LocalDateTime createdAt; // 작성 시간
@@ -111,7 +111,7 @@ public class SightedPets {
     @Builder
     public SightedPets(Breed breed, BreedGroup breedGroup, Gender gender,
                        String weight, String color, String age, NeuteringStatus neuteringStatus, String specialMark,
-                       String reporterTel, City city, Districts districts, LocalDateTime foundDate, String foundPlace,
+                       String reporterTel, District district, City city, LocalDateTime foundDate, String foundPlace,
                        String latitude, String longitude, String detailed, User user) {
         this.views = 0;
         this.totalLike = 0;
@@ -129,8 +129,8 @@ public class SightedPets {
         this.neuteringStatus = neuteringStatus;
         this.specialMark = specialMark;
         this.reporterTel = reporterTel;
+        this.district = district;
         this.city = city;
-        this.districts = districts;
         this.foundDate = foundDate;
         this.foundPlace = foundPlace;
         this.latitude = latitude;
@@ -152,8 +152,8 @@ public class SightedPets {
         this.reporterTel = postEdit.getPhone();
         this.foundPlace = postEdit.getArea();
         this.foundDate = postEdit.getDate();
+        this.district = postEdit.getDistrict();
         this.city = postEdit.getCity();
-        this.districts = postEdit.getDistricts();
         this.longitude = postEdit.getLongitude();
         this.latitude = postEdit.getLatitude();
         this.detailed = postEdit.getDetailed();
@@ -180,7 +180,7 @@ public class SightedPets {
                 .specialMark(specialMark)
                 .reporterTel(reporterTel)
                 .city(city)
-                .districts(districts)
+                .district(district)
                 .foundPlace(foundPlace)
                 .latitude(latitude)
                 .longitude(longitude)
@@ -200,7 +200,7 @@ public class SightedPets {
     public void removeImg(SightedImg img) {
         // --
         if (sightedImgList.size() == 1) {
-            throw new ImageNotFound();
+            throw new ImageNotFoundException();
         }
 
         this.sightedImgList.remove(img);

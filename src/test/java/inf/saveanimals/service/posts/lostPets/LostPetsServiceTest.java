@@ -4,13 +4,13 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.posts.lost.LostComments;
 import inf.saveanimals.domain.posts.lost.LostPets;
 
 import inf.saveanimals.domain.users.User;
-import inf.saveanimals.exception.CommentNotFound;
 import inf.saveanimals.repository.posts.lost.LostImgRepository;
 import inf.saveanimals.repository.posts.lost.LostPetsRepository;
 import inf.saveanimals.repository.users.UserRepository;
@@ -18,8 +18,8 @@ import inf.saveanimals.request.posts.lost.LostCommentCreate;
 import inf.saveanimals.request.posts.lost.LostPetsCreate;
 
 import inf.saveanimals.request.posts.lost.LostPetsEdit;
+import inf.saveanimals.response.posts.lostPets.LostPetCommentDto;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +91,8 @@ class LostPetsServiceTest {
                 .character("파란색목줄착용, 겁이많음,진드기")
                 .phone("123-123")
                 .area("공주시 우금티터널")
-                .city(City.GONGJU_SI)
-                .districts(Districts.CHUNGCHEONGNAM_CITY)
+                .city(City.CHUNGCHEONGNAM_CITY)
+                .district(District.GONGJU_SI)
                 .date(LocalDateTime.now())
                 .latitude("123")
                 .longitude("123")
@@ -133,8 +133,8 @@ class LostPetsServiceTest {
                 .character("파란색목줄착용, 겁이많음,진드기")
                 .phone("123-123")
                 .area("공주시 우금티터널")
-                .city(City.GONGJU_SI)
-                .districts(Districts.CHUNGCHEONGNAM_CITY)
+                .city(City.CHUNGCHEONGNAM_CITY)
+                .district(District.GONGJU_SI)
                 .build();
 
 
@@ -147,7 +147,7 @@ class LostPetsServiceTest {
                 .build();
 
         // when
-        lostPetsService.edit(postId, postEdit);
+        lostPetsService.edit(postId, postEdit, null);
 
         LostPets foundPost = lostPetsService.findById(postId);
         // then
@@ -177,8 +177,8 @@ class LostPetsServiceTest {
                 .character("파란색목줄착용, 겁이많음,진드기")
                 .phone("123-123")
                 .area("공주시 우금티터널")
-                .city(City.GONGJU_SI)
-                .districts(Districts.CHUNGCHEONGNAM_CITY)
+                .city(City.CHUNGCHEONGNAM_CITY)
+                .district(District.GONGJU_SI)
                 .build();
 
 
@@ -218,8 +218,8 @@ class LostPetsServiceTest {
                 .character("파란색목줄착용, 겁이많음,진드기")
                 .phone("123-123")
                 .area("공주시 우금티터널")
-                .city(City.GONGJU_SI)
-                .districts(Districts.CHUNGCHEONGNAM_CITY)
+                .city(City.CHUNGCHEONGNAM_CITY)
+                .district(District.GONGJU_SI)
                 .date(LocalDateTime.now())
                 .latitude("123")
                 .longitude("123")
@@ -242,9 +242,9 @@ class LostPetsServiceTest {
         commentsService.write(postId, commentCreate2, user);
 
         //then
-        List<LostComments> result = commentsService.getCommentsByLostPetsId(postId);
+        List<LostPetCommentDto> result = commentsService.getCommentsByLostPetsId(postId);
 
-        for (LostComments comments : result) {
+        for (LostPetCommentDto comments : result) {
             log.info("comments={}", comments.getContent());
         }
 

@@ -11,4 +11,6 @@ import java.util.Optional;
  */
 public interface LostLikeRepository extends JpaRepository<LostLike, Long> {
     Optional<LostLike> findByUserAndLostPets(User user, LostPets lostPets);
+
+    boolean existsByUserAndLostPets(User user, LostPets lostPets);
 }

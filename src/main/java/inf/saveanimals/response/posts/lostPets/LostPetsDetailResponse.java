@@ -5,10 +5,11 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
+import inf.saveanimals.domain.posts.lost.LostPets;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,78 +24,95 @@ public class LostPetsDetailResponse {
 
     private Long pet_id; // lost_pets pk
 
-    private Category category; // 글 카테고리 (실종 / 제보)
-    private IsCompleted isCompleted; // 글 상태
-
-   // 작성자 정보
-    private String name; // 작성자 닉네임
-    private String profile_image; // 작성자 프로필
-
-    // 작성 시간
+    private String user_nickname;
+    private String user_name;
+    private String user_profile_image;
+    private int like_count;
+    private int view_count;
     private LocalDateTime date; // 실종 날짜
-    private LocalDateTime created_at; // 작성 시간
+    private LocalDateTime createdAt; // 작성 시간
 
-    // 동물 정보
-    private Breed kind; // 품종
-    private BreedGroup animal; // 동물 종류
-    private Gender gender; // 성별
-    private String weight; // 몸무게
-    private String color; //색상
-    private String age; // 나이
-    private NeuteringStatus is_neutering; // 중성화 여부
-    private String character; // 특징
-    private String phone; // 보호자 연락처
+    private String area; // 장소 상세설명
+    private String city; // 도시
+    private String district; // 지역구
+    private String latitude;
+    private String longitude;
+
+    private String animal;
+    private String kind;
+    private String gender;
+    private String weight;
+    private String color;
+    private String age;
+    private boolean is_neutering;
+    private String charater;
+    private String phone;
+    private String description;
+    private List<String> pet_image;
+
+    private boolean is_completed;
 
 
-    // ---위치 정보---
-    private City city;
-    private Districts districts;
-    private String area; // 잃어버린 장소
-    // 지도 api 받고 나서?
-    private String latitude; //  잃어버린 장소 - 위도
-    private String longitude; // 잃어버린 장소 - 경도
-
-    // 이미지
-    private List<String> img_url_list = new ArrayList<>();
-
-    private Integer views; //조회수
-    private Integer total_like; //좋아요 수
-
-    private String detailed; // 본문
-
-    @QueryProjection
     @Builder
-    public LostPetsDetailResponse(Long pet_id, Category category, IsCompleted isCompleted,
-                                  String name, String profile_image,
-                                  LocalDateTime date, LocalDateTime created_at,
-                                  Breed kind, BreedGroup animal, Gender gender, String weight, String color, String age,
-                                  NeuteringStatus is_neutering, String character, String phone,
-                                  City city, Districts districts, String area, String latitude, String longitude,
-                                  List<String> img_url_list, Integer views, Integer total_like, String detailed) {
+    public LostPetsDetailResponse(String user_nickname, String user_name, Long pet_id, int like_count,
+                                  String user_profile_image, int view_count, LocalDateTime createdAt, LocalDateTime date,
+                                  String city, String district, String area, String latitude, String animal, String longitude,
+                                  String kind, String weight, String gender, String color, String age, boolean is_neutering, String charater, String description,
+                                  boolean is_completed, List<String> pet_image, String phone) {
+        this.user_nickname = user_nickname;
+        this.user_name = user_name;
         this.pet_id = pet_id;
-        this.category = category;
-        this.isCompleted = isCompleted;
-        this.name = name;
-        this.profile_image = profile_image;
+        this.like_count = like_count;
+        this.user_profile_image = user_profile_image;
+        this.view_count = view_count;
+        this.createdAt = createdAt;
         this.date = date;
-        this.created_at = created_at;
-        this.kind = kind;
+        this.city = city;
+        this.district = district;
+        this.area = area;
+        this.latitude = latitude;
         this.animal = animal;
-        this.gender = gender;
+        this.longitude = longitude;
+        this.kind = kind;
         this.weight = weight;
+        this.gender = gender;
         this.color = color;
         this.age = age;
         this.is_neutering = is_neutering;
-        this.character = character;
+        this.charater = charater;
+        this.description = description;
+        this.is_completed = is_completed;
+        this.pet_image = pet_image;
         this.phone = phone;
-        this.city = city;
-        this.districts = districts;
-        this.area = area;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.img_url_list = img_url_list;
-        this.views = views;
-        this.total_like = total_like;
-        this.detailed = detailed;
     }
+
+    public static LostPetsDetailResponse fromEntity(LostPets lostPets) {
+        return LostPetsDetailResponse.builder()
+                .pet_id(lostPets.getId())
+                .user_name(lostPets.getUser().getName())
+                .user_profile_image(lostPets.getUser().getImg())
+                .like_count(lostPets.getTotalLike())
+                .view_count(lostPets.getViews())
+                .date(lostPets.getLostDate())
+                .createdAt(lostPets.getCreatedAt())
+                .area(lostPets.getHappenPlace())
+                .city(lostPets.getCity().getCityName())
+                .district(lostPets.getDistrict().getKCode())
+                .latitude(lostPets.getLatitude())
+                .longitude(lostPets.getLongitude())
+                .animal(lostPets.getBreedGroup().getBreed())
+                .kind(lostPets.getBreed().getKCode())
+                .gender(lostPets.getGender().getKCode())
+                .weight(lostPets.getWeight())
+                .color(lostPets.getColor())
+                .age(lostPets.getAge())
+                .is_neutering(lostPets.getNeuteringStatus().is_neutering())
+                .charater(lostPets.getSpecialMark())
+                .phone(lostPets.getPetOwnerTel())
+                .description(lostPets.getDetailed())
+                .pet_image(lostPets.getFullImg())
+                .is_completed(lostPets.getIsCompleted().is_completed())
+                .build();
+    }
+
 }

@@ -4,8 +4,8 @@ import inf.saveanimals.domain.animals.common.Breed;
 import inf.saveanimals.domain.animals.common.BreedGroup;
 import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.animals.common.NeuteringStatus;
+import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
 
 import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.users.User;
@@ -22,8 +22,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LostPetsCreate {
 
+    private LocalDateTime date; // 실종 날짜
+    private String area; // 잃어버린 장소
+    private City city;
+    private District district;
+
+    private String latitude; //  잃어버린 장소 - 위도
+    private String longitude; // 잃어버린 장소 - 경도
+
     private Breed kind; // 품종
-    private BreedGroup animal;
+    private BreedGroup animal; // 동물분류
 
     private Gender gender; // 성별
     private String weight; // 몸무게
@@ -33,22 +41,14 @@ public class LostPetsCreate {
 
     private String character; // 특징
     private String phone; // 보호자 연락처
-    private String area; // 잃어버린 장소
 
-    private City city;
-    private Districts districts;
-
-    private LocalDateTime date; // 실종 날짜
-    private String latitude; //  잃어버린 장소 - 위도
-    private String longitude; // 잃어버린 장소 - 경도
-
-    private String detailed;
+    private String description;
 
     @Builder
     public LostPetsCreate(Breed kind, BreedGroup animal, Gender gender,
                           String weight, String color, String age, NeuteringStatus is_neutering,
                           String character, String phone, String area,
-                          City city, Districts districts, LocalDateTime date, String latitude, String longitude, String detailed) {
+                          District district, City city, LocalDateTime date, String latitude, String longitude, String description) {
         this.kind = kind;
         this.animal = animal;
         this.gender = gender;
@@ -59,12 +59,12 @@ public class LostPetsCreate {
         this.character = character;
         this.phone = phone;
         this.area = area;
+        this.district = district;
         this.city = city;
-        this.districts = districts;
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.detailed = detailed;
+        this.description = description;
     }
 
 
@@ -80,12 +80,12 @@ public class LostPetsCreate {
                 .specialMark(character)
                 .petOwnerTel(phone)
                 .city(city)
-                .districts(districts)
+                .district(district)
                 .lostDate(date)
                 .happenPlace(area)
                 .latitude(latitude)
                 .longitude(longitude)
-                .detailed(detailed)
+                .detailed(description)
                 .user(user)
                 .build();
     }

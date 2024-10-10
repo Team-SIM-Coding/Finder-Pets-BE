@@ -1,22 +1,23 @@
 package inf.saveanimals.repository.posts.lost;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import inf.saveanimals.domain.animals.common.Breed;
-import inf.saveanimals.domain.animals.common.BreedGroup;
-import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.Districts;
-import inf.saveanimals.domain.posts.common.IsMainImg;
-import inf.saveanimals.domain.posts.lost.QLostImg;
+import inf.saveanimals.domain.posts.lost.LostPets;
+import inf.saveanimals.domain.posts.lost.QLostComments;
+
 import inf.saveanimals.domain.posts.lost.QLostPets;
-import inf.saveanimals.request.posts.SearchCondition;
+import inf.saveanimals.domain.users.QUser;
+import inf.saveanimals.controller.dto.SearchCondition;
+import inf.saveanimals.response.posts.lostPets.LostPetCommentDto;
 import inf.saveanimals.response.posts.lostPets.LostPetsThumbnailResponse;
-import inf.saveanimals.response.posts.lostPets.QLostPetsThumbnailResponse;
+
+import inf.saveanimals.response.posts.lostPets.QLostPetCommentDto;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 
 public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
 
@@ -28,84 +29,80 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
 
     @Override
     public Page<LostPetsThumbnailResponse> findAllBySearchCondition(SearchCondition searchCondition, Pageable pageable) {
-        QLostPets lostPets = QLostPets.lostPets;
-        QLostImg lostImg = QLostImg.lostImg;
+        QLostPets lostPet = QLostPets.lostPets;
 
-        QueryResults<LostPetsThumbnailResponse> results  = queryFactory.select(
-                        new QLostPetsThumbnailResponse(
-                                lostPets.id.as("pet_id"),
-                                lostPets.category,
-                                lostPets.isCompleted,
-                                lostPets.breed.as("kind"),
-                                lostPets.breedGroup.as("animal"),
-                                lostPets.gender,
-                                lostPets.weight,
-                                lostPets.specialMark.as("character"),
-                                lostPets.happenPlace.as("area"),
-                                lostImg.imgUrl.as("img_url"),
-                                lostPets.views,
-                                lostPets.totalLike.as("total_like")
-                        ))
-                .from(lostImg)
-                .join(lostImg.lostPets, lostPets)
-                .where(lostImg.isMainImg.eq(IsMainImg.Y)
-                        .and(eqBreedGroup(searchCondition.getAnimal()))
-                        .and(eqBreed(searchCondition.getKind()))
-                        .and(eqCity(searchCondition.getCity()))
-                        .and(eqDistrict(searchCondition.getDistricts())))
-                .orderBy(lostPets.id.desc()) // 최신순
+        // whereClause
+        BooleanBuilder whereClause = buildSearchCondition(searchCondition, lostPet);
+
+        List<LostPets> lostPetsList = queryFactory.selectFrom(lostPet)
+                .distinct()
+                .where(whereClause)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        return new PageImpl<>(results.getResults(),pageable,results.getTotal());
+        Long total = queryFactory.select(lostPet.count())
+                .from(lostPet)
+                .where(whereClause)
+                .fetchOne();
+
+        // Map LostPets(Entity) to Dto
+        List<LostPetsThumbnailResponse> finalLostPets = lostPetsList.stream()
+                .map(this::convertDto)
+                .toList();
+
+        return new PageImpl<>(finalLostPets, pageable, total);
+
     }
+
 
     @Override
-    public Page<LostPetsThumbnailResponse> findAllByAccount(Long userId, Pageable pageable) {
+    public List<LostPetCommentDto> findCommentByPetId(Long lostPetsId) {
+        QLostComments lostComments = QLostComments.lostComments;
         QLostPets lostPets = QLostPets.lostPets;
-        QLostImg lostImg = QLostImg.lostImg;
+        QUser user = QUser.user;
 
-        QueryResults<LostPetsThumbnailResponse> results  = queryFactory.select(
-                        new QLostPetsThumbnailResponse(
-                                lostPets.id.as("pet_id"),
-                                lostPets.category,
-                                lostPets.isCompleted,
-                                lostPets.breed.as("kind"),
-                                lostPets.breedGroup.as("animal"),
-                                lostPets.gender,
-                                lostPets.weight,
-                                lostPets.specialMark.as("character"),
-                                lostPets.happenPlace.as("area"),
-                                lostImg.imgUrl.as("img_url"),
-                                lostPets.views,
-                                lostPets.totalLike.as("total_like")
-                        ))
-                .from(lostImg)
-                .join(lostImg.lostPets, lostPets)
-                .where(lostImg.isMainImg.eq(IsMainImg.Y)
-                        .and(lostPets.user.id.eq(userId)))
-                .orderBy(lostPets.id.desc()) // 최신순
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-
-        return new PageImpl<>(results.getResults(),pageable,results.getTotal());
+        return queryFactory.select(new QLostPetCommentDto(
+                        lostPets.id.as("id"),
+                        user.id.as("userId"),
+                        user.nickname.as("user_nickname"),
+                        user.img.as("user_profile_image"),
+                        lostComments.content,
+                        lostComments.create_at.as("createdAt")
+                ))
+                .from(lostComments)
+                .join(lostComments.lostPets, lostPets)
+                .join(lostComments.user, user)
+                .where(lostComments.lostPets.id.eq(lostPetsId))
+                .fetch();
     }
 
-    private BooleanExpression eqBreedGroup(BreedGroup breedGroup) {
-        return breedGroup != null ? QLostPets.lostPets.breedGroup.eq(breedGroup) : null;
+    private static BooleanBuilder buildSearchCondition(SearchCondition condition, QLostPets lostPets) {
+        BooleanBuilder whereClause = new BooleanBuilder();
+
+        // 품종
+        if (condition.getAnimal() != null) {
+            whereClause.and(lostPets.breed.eq(condition.getAnimal()));
+        }
+
+        // 동물 분류
+        if (condition.getKind() != null) {
+            whereClause.and(lostPets.breedGroup.eq(condition.getKind()));
+        }
+
+        if (condition.getCity() != null) {
+            whereClause.and(lostPets.city.eq(condition.getCity()));
+        }
+
+        if (condition.getDistrict() != null) {
+            whereClause.and(lostPets.district.eq(condition.getDistrict()));
+        }
+
+        return whereClause;
     }
 
-    private BooleanExpression eqBreed(Breed breed) {
-        return breed != null ? QLostPets.lostPets.breed.eq(breed) : null;
+    private LostPetsThumbnailResponse convertDto(LostPets lostPets) {
+       return LostPetsThumbnailResponse.fromEntity(lostPets);
     }
 
-    private BooleanExpression eqCity(City city) {
-        return city != null ? QLostPets.lostPets.city.eq(city) : null;
-    }
-
-    private BooleanExpression eqDistrict(Districts districts) {
-        return districts != null ? QLostPets.lostPets.districts.eq(districts) : null;
-    }
 }

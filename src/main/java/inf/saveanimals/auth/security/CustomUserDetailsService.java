@@ -1,6 +1,6 @@
 package inf.saveanimals.auth.security;
 
-import inf.saveanimals.exception.UserNotFoundException;
+import inf.saveanimals.exception.users.UserNotFoundException;
 import inf.saveanimals.repository.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

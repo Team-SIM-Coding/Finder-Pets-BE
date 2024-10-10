@@ -7,9 +7,13 @@ import inf.saveanimals.domain.animals.common.Gender;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
 
+import inf.saveanimals.domain.posts.lost.LostPets;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -17,41 +21,77 @@ import lombok.Setter;
 public class LostPetsThumbnailResponse {
     private Long pet_id; // lostPets pk
 
-    private Category category; // 글 카테고리 (실종 / 제보)
-    private IsCompleted isCompleted; // 글 상태
+    private LocalDateTime lostDate; // 실종 날짜
+    private LocalDateTime createdAt; // 작성 시간
 
-    // --실종동물 등록 시 정보 입력--
-    private Breed kind; // 품종
-    private BreedGroup animal; // 동물 종류
+    private String area;
+    private String city;
+    private String district;
 
-    private Gender gender; // 성별
+    private String animal; // 동물 종류
+    private String kind; // 품종
+    private String gender; // 성별
     private String weight; // 몸무게
+    private String color;
+    private String age;
     private String character; // 특징
-    private String area; // 잃어버린 장소
-
-
-    // 이미지
-    private String img_url;
+    private String phone; // 연락망
+    private String description;
+    private String pet_image;
+    private boolean isCompleted; // 글 상태
 
     private Integer views; //조회수
     private Integer total_like; //좋아요 수
 
-    @QueryProjection
-    public LostPetsThumbnailResponse(Long pet_id, Category category, IsCompleted isCompleted,
-                                     Breed kind, BreedGroup animal, Gender gender,
-                                     String weight, String character, String area,
-                                     String img_url, Integer views, Integer total_like) {
+
+    @Builder
+    public LostPetsThumbnailResponse(Long pet_id, LocalDateTime lostDate, LocalDateTime createdAt, String district,
+                                     String weight, String area, String city, String kind, String gender, String animal,
+                                     String age, String color, String phone, String character, String description, String pet_image,
+                                     boolean isCompleted, Integer views, Integer total_like) {
         this.pet_id = pet_id;
-        this.category = category;
-        this.isCompleted = isCompleted;
-        this.kind = kind;
-        this.animal = animal;
-        this.gender = gender;
+        this.lostDate = lostDate;
+        this.createdAt = createdAt;
+        this.district = district;
         this.weight = weight;
-        this.character = character;
         this.area = area;
-        this.img_url = img_url;
+        this.city = city;
+        this.kind = kind;
+        this.gender = gender;
+        this.animal = animal;
+        this.age = age;
+        this.color = color;
+        this.phone = phone;
+        this.character = character;
+        this.description = description;
+        this.pet_image = pet_image;
+        this.isCompleted = isCompleted;
         this.views = views;
         this.total_like = total_like;
+    }
+
+
+
+    public static LostPetsThumbnailResponse fromEntity(LostPets lostPets) {
+        return LostPetsThumbnailResponse.builder()
+                .pet_id(lostPets.getId())
+                .lostDate(lostPets.getLostDate())
+                .createdAt(lostPets.getCreatedAt())
+                .area(lostPets.getHappenPlace())
+                .city(lostPets.getCity().getCityName())
+                .district(lostPets.getDistrict().getKCode())
+                .animal(lostPets.getBreedGroup().getBreed())
+                .kind(lostPets.getBreed().getKCode())
+                .gender(lostPets.getGender().getKCode())
+                .weight(lostPets.getWeight())
+                .color(lostPets.getColor())
+                .character(lostPets.getSpecialMark())
+                .phone(lostPets.getPetOwnerTel())
+                .description(lostPets.getDetailed())
+                .pet_image(lostPets.getThumbnail())
+                .isCompleted(lostPets.getIsCompleted().is_completed())
+                .views(lostPets.getViews())
+                .total_like(lostPets.getTotalLike())
+                .build();
     }
 }

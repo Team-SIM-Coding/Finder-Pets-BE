@@ -94,6 +94,10 @@ public class User implements UserDetails {
         this.intro = updateDto.getIntro();
     }
 
+    public void updateProfileImg(String profile) {
+        this.img = profile;
+    }
+
     //========== UserDetails implements ==========//
     /**
      * Token을 고유한 Email 값으로 생성합니다

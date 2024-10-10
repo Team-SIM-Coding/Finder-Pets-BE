@@ -30,6 +30,8 @@ public class QLostComments extends EntityPathBase<LostComments> {
 
     public final QLostPets lostPets;
 
+    public final inf.saveanimals.domain.users.QUser user;
+
     public final StringPath user_image = createString("user_image");
 
     public final StringPath user_nickname = createString("user_nickname");
@@ -53,6 +55,7 @@ public class QLostComments extends EntityPathBase<LostComments> {
     public QLostComments(Class<? extends LostComments> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.lostPets = inits.isInitialized("lostPets") ? new QLostPets(forProperty("lostPets"), inits.get("lostPets")) : null;
+        this.user = inits.isInitialized("user") ? new inf.saveanimals.domain.users.QUser(forProperty("user")) : null;
     }
 
 }

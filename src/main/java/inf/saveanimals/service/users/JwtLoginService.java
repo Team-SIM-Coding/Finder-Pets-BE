@@ -3,8 +3,7 @@ package inf.saveanimals.service.users;
 import inf.saveanimals.auth.jwt.util.JwtProperties;
 import inf.saveanimals.auth.security.CustomUserDetailsService;
 import inf.saveanimals.domain.users.User;
-import inf.saveanimals.exception.ResourceNotFoundException;
-import inf.saveanimals.exception.UserNotFoundException;
+import inf.saveanimals.exception.users.UserNotFoundException;
 import inf.saveanimals.repository.token.RefreshTokenRepository;
 import inf.saveanimals.repository.users.UserRepository;
 import inf.saveanimals.request.token.CreateRefreshToken;
@@ -42,6 +41,9 @@ public class JwtLoginService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 로그인
+     */
     public UserTokenDto login(LoginRequest loginRequest, HttpServletResponse response) {
         // 인증된 회원정보인지 검증
         authenticate(loginRequest.getEmail(), loginRequest.getPassword());

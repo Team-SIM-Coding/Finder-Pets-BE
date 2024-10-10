@@ -40,7 +40,7 @@ public class QLostPets extends EntityPathBase<LostPets> {
 
     public final StringPath detailed = createString("detailed");
 
-    public final EnumPath<inf.saveanimals.domain.areas.Districts> districts = createEnum("districts", inf.saveanimals.domain.areas.Districts.class);
+    public final EnumPath<inf.saveanimals.domain.areas.District> district = createEnum("district", inf.saveanimals.domain.areas.District.class);
 
     public final EnumPath<inf.saveanimals.domain.animals.common.Gender> gender = createEnum("gender", inf.saveanimals.domain.animals.common.Gender.class);
 
@@ -57,6 +57,8 @@ public class QLostPets extends EntityPathBase<LostPets> {
     public final DateTimePath<java.time.LocalDateTime> lostDate = createDateTime("lostDate", java.time.LocalDateTime.class);
 
     public final ListPath<LostImg, QLostImg> lostImgs = this.<LostImg, QLostImg>createList("lostImgs", LostImg.class, QLostImg.class, PathInits.DIRECT2);
+
+    public final ListPath<LostLike, QLostLike> lostLikes = this.<LostLike, QLostLike>createList("lostLikes", LostLike.class, QLostLike.class, PathInits.DIRECT2);
 
     public final EnumPath<inf.saveanimals.domain.animals.common.NeuteringStatus> neuteringStatus = createEnum("neuteringStatus", inf.saveanimals.domain.animals.common.NeuteringStatus.class);
 
