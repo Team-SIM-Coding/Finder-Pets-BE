@@ -62,7 +62,7 @@ public class SightedPostApiController {
     }
 
     // 이미지 삭제
-    @DeleteMapping("/posts/sighted/{pet_id}/img")
+    @DeleteMapping("/post/sighted/{pet_id}/img")
     public void deleteImg(@PathVariable("pet_id") Long postId, @RequestParam ("img") String imgUrl, @AuthenticationPrincipal User user) {
         imgService.deleteImg(postId, imgUrl);
     }
@@ -78,12 +78,12 @@ public class SightedPostApiController {
     // 검색 페이징
     @GetMapping("/post/sighted/all")
     public PagedModel<EntityModel<SightedPetsThumbnailResponse>> search(@AuthenticationPrincipal User user, Pageable pageable,
-                                                                        @RequestParam(required = false, name= "kind") BreedGroup kind,
-                                                                        @RequestParam(required = false, name= "animal") Breed animal,
+                                                                        @RequestParam(required = false, name= "animal") BreedGroup animal,
+                                                                        @RequestParam(required = false, name= "kind") Breed kind,
                                                                         @RequestParam(required = false, name = "city") City city,
                                                                         @RequestParam(required = false, name = "district") District district) {
 
-        SearchCondition condition = new SearchCondition(kind, animal, city, district);
+        SearchCondition condition = new SearchCondition(animal,kind, city, district);
 
         Page<SightedPetsThumbnailResponse> response = postService.findPosts(condition, pageable);
 

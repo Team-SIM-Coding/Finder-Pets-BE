@@ -69,12 +69,12 @@ public class LostPostApiController {
     // 검색 페이징
     @GetMapping("/post/lost/all")
     public PagedModel<EntityModel<LostPetsThumbnailResponse>> search(@AuthenticationPrincipal User user, Pageable pageable,
-                                                                      @RequestParam(required = false, name= "kind") BreedGroup kind,
-                                                                      @RequestParam(required = false, name= "animal") Breed animal,
+                                                                     @RequestParam(required = false, name= "animal") BreedGroup animal,
+                                                                     @RequestParam(required = false, name= "kind") Breed kind,
                                                                       @RequestParam(required = false, name = "city") City city,
                                                                       @RequestParam(required = false, name = "district") District district) {
 
-        SearchCondition condition = new SearchCondition(kind, animal, city, district);
+        SearchCondition condition = new SearchCondition(animal, kind, city, district);
 
         Page<LostPetsThumbnailResponse> response = postService.findPosts(condition, pageable);
 

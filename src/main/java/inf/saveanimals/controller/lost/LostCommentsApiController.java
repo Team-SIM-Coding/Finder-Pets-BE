@@ -35,7 +35,7 @@ public class LostCommentsApiController {
         commentsService.updateComment(commentId, request.getComment());
     }
 
-    @GetMapping("/posts/lost/comment/list/{pet_id}")
+    @GetMapping("/post/lost/comment/list/{pet_id}")
     List<LostPetCommentDto> getCommentList(@PathVariable("pet_id") Long petId) {
         return commentsService.getCommentsByLostPetsId(petId);
     }

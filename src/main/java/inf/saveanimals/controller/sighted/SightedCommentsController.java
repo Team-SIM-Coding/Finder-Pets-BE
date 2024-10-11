@@ -21,7 +21,7 @@ public class SightedCommentsController {
     private final SightedCommentsService commentsService;
 
     // 댓글 등록
-    @PostMapping("/post/sighted/comment/register")
+    @PostMapping("/post/sighted/{pet_id}/comment/register")
     public void write(@PathVariable("pet_id") Long postId, @RequestBody SightedCommentCreate request, @AuthenticationPrincipal User user) {
         commentsService.write(postId, request, user);
     }
@@ -39,7 +39,7 @@ public class SightedCommentsController {
     }
 
     // 조회
-    @GetMapping("/posts/sighted/comment/list/{pet_id}")
+    @GetMapping("/post/sighted/comment/list/{pet_id}")
     List<SightedPetCommentDto> getCommentList(@PathVariable("pet_id") Long petId) {
         return commentsService.getCommentsByLostPetsId(petId);
     }
