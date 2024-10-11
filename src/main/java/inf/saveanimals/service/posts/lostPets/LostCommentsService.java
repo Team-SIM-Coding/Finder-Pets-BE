@@ -39,9 +39,19 @@ public class LostCommentsService {
                 .orElseThrow(PostNotFoundException::new);
 
         LostComments comment = commentsRepository.save(create.toEntity(loginUser));
-        comment.assignToUser(loginUser);
 
-        lostPets.addComment(comment);
+        // 대댓글일 경우
+        LostComments parentComment;
+        if (create.getParentId() != null) {
+            parentComment = commentsRepository.findById(create.getParentId()).orElseThrow(CommentNotFoundException::new);
+
+            // 부모 댓글을 설정
+            comment.updateParent(parentComment);
+        }
+
+        comment.assignToUser(loginUser); // 댓글 작성자 설정
+
+        lostPets.addComment(comment); // 게시글에 댓글 추가
     }
 
     // 댓글 삭제

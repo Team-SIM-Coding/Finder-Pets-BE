@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -39,6 +41,14 @@ public class LostComments {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // 대댓글
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "lost_parent_id")
+    private LostComments lostParent;
+
+    @OneToMany(mappedBy = "lostParent", orphanRemoval = true)
+    private List<LostComments> lostChildren = new ArrayList<>();
+
 
     @Builder
     public LostComments(String user_nickname, String user_image, String content) {
@@ -60,4 +70,9 @@ public class LostComments {
     public void update(String message) {
         this.content = message;
     }
+
+    public void updateParent(LostComments comment) {
+        this.lostParent = comment;
+    }
+
 }

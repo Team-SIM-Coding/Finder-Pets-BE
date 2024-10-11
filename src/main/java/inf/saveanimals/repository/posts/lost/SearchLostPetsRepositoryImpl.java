@@ -2,6 +2,7 @@ package inf.saveanimals.repository.posts.lost;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import inf.saveanimals.domain.posts.lost.LostComments;
 import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.posts.lost.QLostComments;
 
@@ -16,7 +17,11 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
@@ -62,20 +67,58 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
         QLostPets lostPets = QLostPets.lostPets;
         QUser user = QUser.user;
 
-        return queryFactory.select(new QLostPetCommentDto(
-                        lostPets.id.as("id"),
-                        user.id.as("userId"),
-                        user.nickname.as("user_nickname"),
-                        user.img.as("user_profile_image"),
-                        lostComments.content,
-                        lostComments.create_at.as("createdAt")
-                ))
-                .from(lostComments)
-                .join(lostComments.lostPets, lostPets)
-                .join(lostComments.user, user)
-                .where(lostComments.lostPets.id.eq(lostPetsId))
+        List<LostComments> allComments = queryFactory
+                .selectFrom(QLostComments.lostComments)
+                .where(QLostComments.lostComments.lostPets.id.eq(lostPetsId))
                 .fetch();
+
+        // 댓글을 부모-자식 구조로 변환
+        return convertToCommentDto(allComments);
     }
+
+    private List<LostPetCommentDto> convertToCommentDto(List<LostComments> allComments) {
+
+        Map<Long, LostPetCommentDto> commentDtoMap = new HashMap<>();
+        List<LostPetCommentDto> rootComments = new ArrayList<>();
+
+        // 1. 최상위 댓글을 필터링하고 DTO로 변환
+        allComments.forEach(comment -> {
+            LostPetCommentDto commentDto = toDto(comment);
+            commentDtoMap.put(commentDto.getId(), commentDto);
+
+            // 부모 댓글이 없는 경우 최상위 댓글로 추가
+            if (comment.getLostParent() == null) {
+                rootComments.add(commentDto);
+            }
+        });
+
+// 2. 자식 댓글을 부모 댓글에 추가
+        allComments.forEach(comment -> {
+            if (comment.getLostParent() != null) {
+                Long parentId = comment.getLostParent().getId();
+                LostPetCommentDto parentDto = commentDtoMap.get(parentId);
+
+                if (parentDto != null) {
+                    parentDto.getChildren().add(commentDtoMap.get(comment.getId()));
+                }
+            }
+        });
+
+        return rootComments;
+    }
+
+    private LostPetCommentDto toDto(LostComments comment) {
+        return new LostPetCommentDto(
+                comment.getId(),
+                comment.getUser().getId(),
+                comment.getUser().getNickname(),
+                comment.getUser().getImg(),
+                comment.getContent(),
+                comment.getCreate_at()
+        );
+    }
+
+
 
     private static BooleanBuilder buildSearchCondition(SearchCondition condition, QLostPets lostPets) {
         BooleanBuilder whereClause = new BooleanBuilder();

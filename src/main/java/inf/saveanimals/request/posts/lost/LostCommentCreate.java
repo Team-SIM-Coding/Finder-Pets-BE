@@ -20,6 +20,8 @@ public class LostCommentCreate {
 
     private String comment; // 내용
 
+    private Long parentId; // 부모 댓글 pk
+
     @Builder
     public LostCommentCreate(String comment) {
         this.comment = comment;
