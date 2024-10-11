@@ -7,12 +7,10 @@ import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.posts.lost.QLostComments;
 
 import inf.saveanimals.domain.posts.lost.QLostPets;
-import inf.saveanimals.domain.users.QUser;
 import inf.saveanimals.controller.dto.SearchCondition;
 import inf.saveanimals.response.posts.lostPets.LostPetCommentDto;
 import inf.saveanimals.response.posts.lostPets.LostPetsThumbnailResponse;
 
-import inf.saveanimals.response.posts.lostPets.QLostPetCommentDto;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -63,16 +61,13 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
 
     @Override
     public List<LostPetCommentDto> findCommentByPetId(Long lostPetsId) {
-        QLostComments lostComments = QLostComments.lostComments;
-        QLostPets lostPets = QLostPets.lostPets;
-        QUser user = QUser.user;
 
         List<LostComments> allComments = queryFactory
                 .selectFrom(QLostComments.lostComments)
                 .where(QLostComments.lostComments.lostPets.id.eq(lostPetsId))
                 .fetch();
 
-        // 댓글을 부모-자식 구조로 변환
+        // dto 리스트로 변환
         return convertToCommentDto(allComments);
     }
 
@@ -81,18 +76,18 @@ public class SearchLostPetsRepositoryImpl implements SearchLostPetsRepository {
         Map<Long, LostPetCommentDto> commentDtoMap = new HashMap<>();
         List<LostPetCommentDto> rootComments = new ArrayList<>();
 
-        // 1. 최상위 댓글을 필터링하고 DTO로 변환
+        // 상위 댓글
         allComments.forEach(comment -> {
             LostPetCommentDto commentDto = toDto(comment);
             commentDtoMap.put(commentDto.getId(), commentDto);
 
-            // 부모 댓글이 없는 경우 최상위 댓글로 추가
+            // 부모 댓글이 없는 경우, 상위 댓글로 추가한다.
             if (comment.getLostParent() == null) {
                 rootComments.add(commentDto);
             }
         });
 
-// 2. 자식 댓글을 부모 댓글에 추가
+        // 자식 댓글이 있을 경우, 리스트에 추가한다.
         allComments.forEach(comment -> {
             if (comment.getLostParent() != null) {
                 Long parentId = comment.getLostParent().getId();
