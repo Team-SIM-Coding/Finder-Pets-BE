@@ -9,10 +9,11 @@ import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
 import inf.saveanimals.domain.posts.common.Category;
 import inf.saveanimals.domain.posts.common.IsCompleted;
+import inf.saveanimals.domain.posts.common.IsMainImg;
+import inf.saveanimals.domain.posts.lost.LostImg;
 import inf.saveanimals.domain.users.User;
 import inf.saveanimals.exception.posts.ImageNotFoundException;
 import inf.saveanimals.request.posts.sighted.SightedPetsEdit;
-import inf.saveanimals.response.posts.sightedPets.SightedPetsDetailResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static inf.saveanimals.utils.constants.ImgConstants.FIRST_FILE;
 
 /**
  * 제보 - 포스팅 본문 [테이블]
@@ -98,15 +101,18 @@ public class SightedPets {
 
     // 이미지
     @JsonIgnore
-    @OneToMany(mappedBy = "sightedPets", cascade = CascadeType.ALL)
-    private List<SightedImg> sightedImgList = new ArrayList<>();
+    @OneToMany(mappedBy = "sightedPets", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<SightedImg> sightedImgs = new ArrayList<>();
 
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sightedPets")
+    @OneToMany(mappedBy = "sightedPets", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<SightedComments> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sightedPets", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<SightedLike> sightedLikes = new ArrayList<>();
 
     @Builder
     public SightedPets(Breed breed, BreedGroup breedGroup, Gender gender,
@@ -156,54 +162,22 @@ public class SightedPets {
         this.city = postEdit.getCity();
         this.longitude = postEdit.getLongitude();
         this.latitude = postEdit.getLatitude();
-        this.detailed = postEdit.getDetailed();
+        this.detailed = postEdit.getDescription();
     }
-
-
-
-    public SightedPetsDetailResponse toSightedPetsDetailResponse() {
-        return SightedPetsDetailResponse.builder()
-                .pet_id(id)
-                .category(category)
-                .isCompleted(isCompleted)
-                .name(writerNickname)
-                .writerProfileImage(writerProfileImage)
-                .foundDate(foundDate)
-                .createdAt(createdAt)
-                .breed(breed)
-                .breedGroup(breedGroup)
-                .gender(gender)
-                .weight(weight)
-                .color(color)
-                .age(age)
-                .neuteringStatus(neuteringStatus)
-                .specialMark(specialMark)
-                .reporterTel(reporterTel)
-                .city(city)
-                .district(district)
-                .foundPlace(foundPlace)
-                .latitude(latitude)
-                .longitude(longitude)
-                .imgPaths(getImgPaths())
-                .views(views)
-                .totalLike(totalLike)
-                .build();
-    }
-
 
 
     // 연관관계 메서드 --
     public void uploadImg(SightedImg img) {
-        sightedImgList.add(img);
+        sightedImgs.add(img);
         img.assignToPost(this);
     }
     public void removeImg(SightedImg img) {
         // --
-        if (sightedImgList.size() == 1) {
+        if (sightedImgs.size() == 1) {
             throw new ImageNotFoundException();
         }
 
-        this.sightedImgList.remove(img);
+        this.sightedImgs.remove(img);
     }
 
     // 실종된 반려동물을 찾았을 때, 완료 처리하는 로직
@@ -212,7 +186,7 @@ public class SightedPets {
     }
 
     private List<String> getImgPaths() {
-        return sightedImgList.stream()
+        return sightedImgs.stream()
                 .map(SightedImg::getImgUrl)
                 .collect(Collectors.toList());
     }
@@ -220,6 +194,11 @@ public class SightedPets {
     private BreedGroup searchBreedGroup(Breed searchTarget) {
         return BreedGroup.findGroup(searchTarget);
 
+    }
+
+    // 조회수
+    public void viewCount() {
+        this.views++;
     }
 
     // 관심하트 관련
@@ -237,12 +216,22 @@ public class SightedPets {
         this.comments.add(comment);
     }
 
-    private String fetchUserNickname() {
-        return user.getNickname();
+    public String getThumbnail() {
+        return this.sightedImgs.stream()
+                .filter(sightedImg -> sightedImg.getIsMainImg() == IsMainImg.Y)
+                .map(SightedImg::getImgUrl)
+                .findFirst()
+                .orElse(null);
     }
 
-    private String fetchUserProfileImage() {
-        return user.getImg();
+    public List<String> getFullImg() {
+        return this.sightedImgs.stream()
+                .map(SightedImg::getImgUrl)
+                .collect(Collectors.toList());
+    }
+
+    public void updateMainImg() {
+        this.sightedImgs.get(FIRST_FILE).updateThumbnail();
     }
 
 }

@@ -54,8 +54,9 @@ public class LostPostApiController {
 
     // 수정
     @PatchMapping(value = "/post/lost/update/{pet_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void editPost( @AuthenticationPrincipal User user,
-                          @PathVariable("pet_id") Long postId, @RequestPart(name = "postEdit", required = false) LostPetsEdit postEdit, @RequestParam(name = "files", required = false) List<MultipartFile> multipartFiles) throws IOException {
+    public void editPost( @AuthenticationPrincipal User user, @PathVariable("pet_id") Long postId,
+                          @RequestPart(name = "postEdit", required = false) LostPetsEdit postEdit,
+                          @RequestParam(name = "files", required = false) List<MultipartFile> multipartFiles) throws IOException {
         postService.edit(postId, postEdit, multipartFiles);
     }
 

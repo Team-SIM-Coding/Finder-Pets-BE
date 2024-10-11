@@ -18,8 +18,9 @@ public class SightedCommentCreate {
     private String user_nickname; // 작성자 닉네임
     private String user_image; // 작성자 프로필
 
-
     private String comment; // 내용
+
+    private Long parentId; // 부모 댓글 pk
 
     @Builder
     public SightedCommentCreate( String comment) {

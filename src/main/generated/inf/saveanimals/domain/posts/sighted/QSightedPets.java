@@ -60,7 +60,9 @@ public class QSightedPets extends EntityPathBase<SightedPets> {
 
     public final StringPath reporterTel = createString("reporterTel");
 
-    public final ListPath<SightedImg, QSightedImg> sightedImgList = this.<SightedImg, QSightedImg>createList("sightedImgList", SightedImg.class, QSightedImg.class, PathInits.DIRECT2);
+    public final ListPath<SightedImg, QSightedImg> sightedImgs = this.<SightedImg, QSightedImg>createList("sightedImgs", SightedImg.class, QSightedImg.class, PathInits.DIRECT2);
+
+    public final ListPath<SightedLike, QSightedLike> sightedLikes = this.<SightedLike, QSightedLike>createList("sightedLikes", SightedLike.class, QSightedLike.class, PathInits.DIRECT2);
 
     public final StringPath specialMark = createString("specialMark");
 

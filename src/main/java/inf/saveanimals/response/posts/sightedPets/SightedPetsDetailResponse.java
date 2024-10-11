@@ -1,22 +1,12 @@
 package inf.saveanimals.response.posts.sightedPets;
 
-import com.querydsl.core.annotations.QueryProjection;
-import inf.saveanimals.domain.animals.common.Breed;
-import inf.saveanimals.domain.animals.common.BreedGroup;
-import inf.saveanimals.domain.animals.common.Gender;
-import inf.saveanimals.domain.animals.common.NeuteringStatus;
-import inf.saveanimals.domain.areas.District;
-import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.District;
-import inf.saveanimals.domain.posts.common.Category;
-import inf.saveanimals.domain.posts.common.IsCompleted;
+import inf.saveanimals.domain.posts.sighted.SightedPets;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,74 +19,95 @@ public class SightedPetsDetailResponse {
 
     private Long pet_id; // sighted_pets pk
 
-    private Category category; // 글 카테고리 (실종 / 제보)
-    private IsCompleted isCompleted; // 글 상태
-
-    // 작성자 정보
-    private String name; // 작성자 닉네임
-    private String writerProfileImage; // 작성자 프로필
-
-    // 작성 시간
-    private LocalDateTime foundDate; // 목격한 날짜
+    private String user_nickname;
+    private String user_name;
+    private String user_profile_image;
+    private int like_count;
+    private int view_count;
+    private LocalDateTime date; // 실종 날짜
     private LocalDateTime createdAt; // 작성 시간
 
-    // 동물 정보
-    private Breed breed; // 품종
-    private BreedGroup breedGroup; // 동물 종류
-    private Gender gender; // 성별
-    private String weight; // 몸무게
-    private String color; //색상
-    private String age; // 나이
-    private NeuteringStatus neuteringStatus; // 중성화 여부
-    private String specialMark; // 특징
-    private String reporterTel; // 제보자 연락처
+    private String area; // 장소 상세설명
+    private String city; // 도시
+    private String district; // 지역구
+    private String latitude;
+    private String longitude;
+
+    private String animal;
+    private String kind;
+    private String gender;
+    private String weight;
+    private String color;
+    private String age;
+    private boolean is_neutering;
+    private String charater;
+    private String phone;
+    private String description;
+    private List<String> pet_image;
+
+    private boolean is_completed;
 
 
-    // ---위치 정보---
-    private District district;
-    private City city;
-    private String foundPlace; // 발견된 장소
-    // 지도 api 받고 나서?
-    private String latitude;  // 장소 - 위도
-    private String longitude; // 장소 - 경도
-
-
-    private List<String> imgPaths = new ArrayList<>(); // 이미지 경로 리스트
-    private Integer views; //조회수
-    private Integer totalLike; //좋아요 수
-
-    @QueryProjection
     @Builder
-    public SightedPetsDetailResponse(Long pet_id, Category category, IsCompleted isCompleted,
-                                     String name, String writerProfileImage,
-                                     LocalDateTime foundDate, LocalDateTime createdAt, Breed breed, BreedGroup breedGroup,
-                                     Gender gender, String weight, String color, String age, NeuteringStatus neuteringStatus,
-                                     String specialMark, String reporterTel,
-                                     District district, City city, String foundPlace, String latitude, String longitude,
-                                     List<String> imgPaths, Integer views, Integer totalLike) {
+    public SightedPetsDetailResponse(Long pet_id, String user_nickname, String user_name, String user_profile_image,
+                                     int view_count, LocalDateTime createdAt, int like_count,
+                                     LocalDateTime date, String city, String latitude, String district, String area, String longitude,
+                                     String animal, String kind, String gender, String weight, String color, String age,
+                                     boolean is_neutering, String charater, String description, boolean is_completed, List<String> pet_image, String phone) {
         this.pet_id = pet_id;
-        this.category = category;
-        this.isCompleted = isCompleted;
-        this.name = name;
-        this.writerProfileImage = writerProfileImage;
-        this.foundDate = foundDate;
+        this.user_nickname = user_nickname;
+        this.user_name = user_name;
+        this.user_profile_image = user_profile_image;
+        this.view_count = view_count;
         this.createdAt = createdAt;
-        this.breed = breed;
-        this.breedGroup = breedGroup;
+        this.like_count = like_count;
+        this.date = date;
+        this.city = city;
+        this.latitude = latitude;
+        this.district = district;
+        this.area = area;
+        this.longitude = longitude;
+        this.animal = animal;
+        this.kind = kind;
         this.gender = gender;
         this.weight = weight;
         this.color = color;
         this.age = age;
-        this.neuteringStatus = neuteringStatus;
-        this.specialMark = specialMark;
-        this.reporterTel = reporterTel;
-        this.district = district;
-        this.city = city;
-        this.foundPlace = foundPlace;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.imgPaths = imgPaths;
-        this.views = views;
-        this.totalLike = totalLike;
+        this.is_neutering = is_neutering;
+        this.charater = charater;
+        this.description = description;
+        this.is_completed = is_completed;
+        this.pet_image = pet_image;
+        this.phone = phone;
+    }
+
+
+    public static SightedPetsDetailResponse fromEntity(SightedPets sightedPets) {
+        return SightedPetsDetailResponse.builder()
+                .pet_id(sightedPets.getId())
+                .user_name(sightedPets.getUser().getName())
+                .user_profile_image(sightedPets.getUser().getImg())
+                .like_count(sightedPets.getTotalLike())
+                .view_count(sightedPets.getViews())
+                .date(sightedPets.getFoundDate())
+                .createdAt(sightedPets.getCreatedAt())
+                .area(sightedPets.getFoundPlace())
+                .city(sightedPets.getCity().getCityName())
+                .district(sightedPets.getDistrict().getKCode())
+                .latitude(sightedPets.getLatitude())
+                .longitude(sightedPets.getLongitude())
+                .animal(sightedPets.getBreedGroup().getBreed())
+                .kind(sightedPets.getBreed().getKCode())
+                .gender(sightedPets.getGender().getKCode())
+                .weight(sightedPets.getWeight())
+                .color(sightedPets.getColor())
+                .age(sightedPets.getAge())
+                .is_neutering(sightedPets.getNeuteringStatus().is_neutering())
+                .charater(sightedPets.getSpecialMark())
+                .phone(sightedPets.getReporterTel())
+                .description(sightedPets.getDetailed())
+                .pet_image(sightedPets.getFullImg())
+                .is_completed(sightedPets.getIsCompleted().is_completed())
+                .build();
     }
 }

@@ -206,25 +206,6 @@ public class LostPets {
         this.comments.add(comment);
     }
 
-    private List<String> getImgPaths() {
-        return lostImgs.stream()
-                .map(LostImg::getImgUrl)
-                .collect(Collectors.toList());
-    }
-
-    private BreedGroup searchBreedGroup(Breed searchTarget) {
-        return BreedGroup.findGroup(searchTarget);
-
-    }
-
-    private String fetchUserNickname() {
-        return user.getNickname();
-    }
-
-    private String fetchUserProfileImage() {
-        return user.getImg();
-    }
-
 
     public String getThumbnail() {
         return this.lostImgs.stream()

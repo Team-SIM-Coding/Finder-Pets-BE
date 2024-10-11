@@ -28,7 +28,13 @@ public class QSightedComments extends EntityPathBase<SightedComments> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final ListPath<SightedComments, QSightedComments> sightedChildren = this.<SightedComments, QSightedComments>createList("sightedChildren", SightedComments.class, QSightedComments.class, PathInits.DIRECT2);
+
+    public final QSightedComments sightedParent;
+
     public final QSightedPets sightedPets;
+
+    public final inf.saveanimals.domain.users.QUser user;
 
     public final StringPath user_image = createString("user_image");
 
@@ -52,7 +58,9 @@ public class QSightedComments extends EntityPathBase<SightedComments> {
 
     public QSightedComments(Class<? extends SightedComments> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.sightedParent = inits.isInitialized("sightedParent") ? new QSightedComments(forProperty("sightedParent"), inits.get("sightedParent")) : null;
         this.sightedPets = inits.isInitialized("sightedPets") ? new QSightedPets(forProperty("sightedPets"), inits.get("sightedPets")) : null;
+        this.user = inits.isInitialized("user") ? new inf.saveanimals.domain.users.QUser(forProperty("user")) : null;
     }
 
 }

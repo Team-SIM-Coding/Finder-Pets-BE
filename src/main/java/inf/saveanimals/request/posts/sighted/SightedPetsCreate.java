@@ -20,8 +20,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SightedPetsCreate {
 
+    private LocalDateTime date; // 실종 날짜
+    private String area; // 잃어버린 장소
+    private City city;
+    private District district;
+
+    private String latitude; //  잃어버린 장소 - 위도
+    private String longitude; // 잃어버린 장소 - 경도
+
     private Breed kind; // 품종
-    private BreedGroup animal;
+    private BreedGroup animal; // 동물분류
 
     private Gender gender; // 성별
     private String weight; // 몸무게
@@ -29,44 +37,33 @@ public class SightedPetsCreate {
     private String age; // 나이
     private NeuteringStatus is_neutering; // 중성화 여부
 
-    private String character; // 상세 설명 (내용 입력칸)
-    private String phone; // 제보자 연락처
-    private String area; // 발견된 장소
+    private String character; // 특징
+    private String phone; // 보호자 연락처
 
-    private District district;
-    private City city;
-
-    private LocalDateTime date; // 목격한 날짜
-
-    // 지도로 받은 정보
-    private String latitude;  // 장소 - 위도
-    private String longitude; // 장소 - 경도
-
-    private String detailed;
+    private String description;
 
     @Builder
-    public SightedPetsCreate(Breed kind, BreedGroup animal, Gender gender,
-                             String weight, String color, String age, NeuteringStatus is_neutering,
-                             String character, String phone, String area,
-                             District district, City city, LocalDateTime date, String latitude, String longitude, String detailed) {
+    public SightedPetsCreate(String area, City city, LocalDateTime date, District district, String latitude,
+                             Breed kind, BreedGroup animal, String longitude, Gender gender,
+                             String color, String age, String weight, NeuteringStatus is_neutering, String character,
+                             String phone, String description) {
+        this.area = area;
+        this.city = city;
+        this.date = date;
+        this.district = district;
+        this.latitude = latitude;
         this.kind = kind;
         this.animal = animal;
+        this.longitude = longitude;
         this.gender = gender;
-        this.weight = weight;
         this.color = color;
         this.age = age;
+        this.weight = weight;
         this.is_neutering = is_neutering;
         this.character = character;
         this.phone = phone;
-        this.area = area;
-        this.district = district;
-        this.city = city;
-        this.date = date;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.detailed = detailed;
+        this.description = description;
     }
-
 
     public SightedPets toEntity(User user) {
         return SightedPets.builder()
@@ -85,10 +82,9 @@ public class SightedPetsCreate {
                 .foundPlace(area)
                 .latitude(latitude)
                 .longitude(longitude)
-                .detailed(detailed)
+                .detailed(description)
                 .user(user)
                 .build();
     }
-
 
 }

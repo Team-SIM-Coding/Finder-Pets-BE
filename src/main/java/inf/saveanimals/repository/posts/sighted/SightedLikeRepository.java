@@ -1,5 +1,6 @@
 package inf.saveanimals.repository.posts.sighted;
 
+
 import inf.saveanimals.domain.posts.sighted.SightedLike;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
@@ -12,4 +13,5 @@ import java.util.Optional;
  */
 public interface SightedLikeRepository extends JpaRepository<SightedLike, Long> {
     Optional<SightedLike> findByUserAndSightedPets(User user, SightedPets sightedPets);
+    boolean existsByUserAndSightedPets(User user, SightedPets sightedPets);
 }

@@ -1,8 +1,11 @@
 package inf.saveanimals.service.posts.sightedPets;
 
+import inf.saveanimals.domain.posts.lost.LostLike;
+import inf.saveanimals.domain.posts.lost.LostPets;
 import inf.saveanimals.domain.posts.sighted.SightedLike;
 import inf.saveanimals.domain.posts.sighted.SightedPets;
 import inf.saveanimals.domain.users.User;
+import inf.saveanimals.exception.posts.LikeAlreadyExistsException;
 import inf.saveanimals.exception.posts.LikesNotFoundException;
 import inf.saveanimals.exception.posts.PostNotFoundException;
 import inf.saveanimals.exception.users.UserNotFoundException;
@@ -33,21 +36,27 @@ public class SightedLikeService {
         SightedPets sightedPets = sightedPetsRepository.findById(sightedPetsId)
                 .orElseThrow(PostNotFoundException::new);
 
-        // 이미 관심하트 되어 있으면, 하트 취소된다.
-        if (likeRepository.findByUserAndSightedPets(loginUser, sightedPets).isPresent()) {
-            sightedPets.deleteLike();
+        // 이미 관심하트 되어 있으면, 취소 처리
+        if (likeRepository.existsByUserAndSightedPets(loginUser, sightedPets)) {
+            throw new LikeAlreadyExistsException();
+
         }
 
+        saveLikeEntity(sightedPets, loginUser); // 관심 엔티티 생성
+        sightedPets.addLike(); // 연관 관계 -> 게시물에 대한 관심수 카운팅
+
+        return sightedPets.getTotalLike();
+    }
+
+    private void saveLikeEntity(SightedPets sightedPets, User loginUser) {
         SightedLike sightedLike = SightedLike.builder()
                 .sightedPets(sightedPets)
                 .user(loginUser)
                 .build();
 
         likeRepository.save(sightedLike);
-        sightedPets.addLike();
-
-        return sightedPets.getTotalLike();
     }
+
 
     // 관심 하트 취소하기
     public void delete(Long sightedPetsId, User user) {
@@ -60,7 +69,7 @@ public class SightedLikeService {
         SightedLike sightedLike = likeRepository.findByUserAndSightedPets(loginUser, sightedPets)
                 .orElseThrow(LikesNotFoundException::new);
 
-        likeRepository.delete(sightedLike);
-        sightedPets.deleteLike();
+        likeRepository.delete(sightedLike); // 관심 엔티티 삭제
+        sightedPets.deleteLike(); // 연관 엔티티-좋아요 취소처리
     }
 }

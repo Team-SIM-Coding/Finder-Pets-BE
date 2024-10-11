@@ -79,7 +79,6 @@ public class LostPetsService {
                 .orElseThrow(PostNotFoundException::new);
 
         lostPetsRepository.delete(lostPets);
-        //  이미지 삭제
     }
 
 

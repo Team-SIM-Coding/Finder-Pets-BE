@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * 제보-이미지 서비스
@@ -33,41 +32,43 @@ public class SightedImgService {
     public SightedImg saveImg(CreateImgRequest imgRequest, MultipartFile multipartFile) throws IOException {
         String imgUrl = fileService.storeFile(multipartFile);
 
+        return savePetImg(imgRequest.getYN(), imgUrl);
+    }
+
+    private SightedImg savePetImg(IsMainImg isMainImg, String imgUrl) {
         SightedImg imgEntity = SightedImg.builder()
                 .imgUrl(imgUrl)
-                .isMainImg(imgRequest.getYN())
+                .isMainImg(isMainImg)
                 .build();
 
         return imgRepository.save(imgEntity);
     }
 
     // 이미지 삭제
-    public void deleteImg(Long postId, Long imgId) {
-        SightedImg postImage = imgRepository.findById(imgId)
+    public void deleteImg(Long postId, String imgUrl) {
+        SightedImg postImage = imgRepository.findByImgUrl(imgUrl)
                 .orElseThrow(ImageNotFoundException::new);
 
         SightedPets postEntity = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
+        // 부모엔티티 컬렉션에서 해당 이미지 제거
         postEntity.removeImg(postImage);
-        imgRepository.delete(postImage); // 연관관계 관리
+
+        // 삭제하려는 이미지가 '대표 이미지'인 경우 새로운 대표 이미지를 설정해야 합니다.
+        if (postImage.getIsMainImg() == IsMainImg.Y) {
+            postEntity.updateMainImg();
+        }
+
+        imgRepository.delete(postImage);
     }
 
-    // 추가로 이미지를 넣고 싶을 때?
-    public void addExtraImage(Long postId, List<MultipartFile> fileList) throws IOException {
-        SightedPets postEntity = postRepository.findById(postId)
-                .orElseThrow(PostNotFoundException::new);
 
+    // 게시물 수정 - 추가 이미지 업로드
+    public SightedImg addExtraImg(MultipartFile multipartFile) throws IOException {
+        String imgUrl = fileService.storeFile(multipartFile);
 
-        for(int i=0; i<fileList.size();i++){
-            CreateImgRequest imgRequest = new CreateImgRequest();
-
-            imgRequest.setYN(IsMainImg.N);
-
-            // 리스트 형태로 이미지들 저장
-            SightedImg postImage = saveImg(imgRequest, fileList.get(i));
-            postEntity.uploadImg(postImage);
-        }
+        return savePetImg(IsMainImg.N, imgUrl);
     }
 
 }

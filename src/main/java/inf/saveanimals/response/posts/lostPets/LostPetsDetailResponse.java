@@ -1,19 +1,8 @@
 package inf.saveanimals.response.posts.lostPets;
 
-import com.querydsl.core.annotations.QueryProjection;
-import inf.saveanimals.domain.animals.common.Breed;
-import inf.saveanimals.domain.animals.common.BreedGroup;
-import inf.saveanimals.domain.animals.common.Gender;
-import inf.saveanimals.domain.animals.common.NeuteringStatus;
-import inf.saveanimals.domain.areas.District;
-import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.posts.common.Category;
-import inf.saveanimals.domain.posts.common.IsCompleted;
 import inf.saveanimals.domain.posts.lost.LostPets;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 

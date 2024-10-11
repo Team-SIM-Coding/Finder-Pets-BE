@@ -32,10 +32,6 @@ public class SightedImg {
     @JoinColumn(name = "sighted_pets_id")
     private SightedPets sightedPets;
 
-    public void assignToPost(SightedPets sightedPets) {
-        this.sightedPets = sightedPets;
-    }
-
     @Builder
     public SightedImg(String imgUrl, IsMainImg isMainImg, SightedPets sightedPets) {
         this.imgUrl = imgUrl;
@@ -43,7 +39,13 @@ public class SightedImg {
         this.sightedPets = sightedPets;
     }
 
+    public void assignToPost(SightedPets sightedPets) {
+        this.sightedPets = sightedPets;
+    }
 
+    public void updateThumbnail() {
+        this.isMainImg = IsMainImg.Y;
+    }
 
     @Override
     public String toString() {

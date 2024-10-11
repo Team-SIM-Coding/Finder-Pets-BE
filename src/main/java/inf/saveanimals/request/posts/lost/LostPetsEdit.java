@@ -7,7 +7,6 @@ import inf.saveanimals.domain.animals.common.NeuteringStatus;
 
 import inf.saveanimals.domain.areas.District;
 import inf.saveanimals.domain.areas.City;
-import inf.saveanimals.domain.areas.District;
 import lombok.*;
 
 import java.time.LocalDateTime;

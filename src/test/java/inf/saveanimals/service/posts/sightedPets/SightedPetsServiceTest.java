@@ -136,7 +136,7 @@ class SightedPetsServiceTest {
                 .build();
 
         // when
-        sightedPetsService.edit(postId, postEdit);
+        sightedPetsService.edit(postId, postEdit, null);
 
         SightedPets foundPost = sightedPetsService.findById(postId);
 
