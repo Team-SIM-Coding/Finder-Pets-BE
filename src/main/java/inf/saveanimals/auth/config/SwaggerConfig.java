@@ -1,12 +1,12 @@
 package inf.saveanimals.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme.Type;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,41 +16,34 @@ import org.springframework.http.converter.json.AbstractJackson2HttpMessageConver
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
+import static inf.saveanimals.utils.constants.JwtConstants.JWT_AUTH;
 
-@OpenAPIDefinition(
-        info = @Info(
-                title = "Example API Docs",
-                description = "Description",
-                version = "v1"
-        )
-)
 @Configuration
 public class SwaggerConfig {
 
-    private static final String BEARER_TOKEN_PREFIX = "Bearer";
-
     @Bean
-    public OpenAPI openAPI() {
-        String securityJwtName = "JWT";
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityJwtName);
-        Components components = new Components()
-                .addSecuritySchemes(securityJwtName, new SecurityScheme()
-                        .name(securityJwtName)
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme(BEARER_TOKEN_PREFIX)
-                        .bearerFormat(securityJwtName));
-
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addSecurityItem(securityRequirement)
-                .components(components);
+                .info(new Info()
+                        .title("My API")
+                        .version("1.0")
+                        .description("API documentation for my application")
+                )
+                .addSecurityItem(new SecurityRequirement().addList("custom-auth"))
+                .components(new io.swagger.v3.oas.models.Components()
+                        .addSecuritySchemes("custom-auth", new SecurityScheme()
+                                .type(Type.APIKEY)
+                                .in(SecurityScheme.In.HEADER) // Header 위치
+                                .name(JWT_AUTH) // 사용자 정의 헤더 이름
+                        )
+                );
     }
 
 
     /**
-     *   application/octet-stream을 다뤄주는 HttpMessageConverter를 추가
+     * application/octet-stream을 다뤄주는 HttpMessageConverter를 추가
      */
     @Configuration
     public class WebConfig implements WebMvcConfigurer {
@@ -82,15 +75,10 @@ public class SwaggerConfig {
             return false;
         }
 
-        @Override
-        public boolean canWrite(Type type, Class<?> clazz, MediaType mediaType) {
-            return false;
-        }
 
         @Override
         protected boolean canWrite(MediaType mediaType) {
             return false;
         }
     }
-
 }
