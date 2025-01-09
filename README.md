@@ -50,7 +50,7 @@
 + add-swagger : 개발 및 배포용으로 사용됨
 
 원래는 각각 개발단계에서 사용하려고 생성한 브랜치였지만,
-develop 브랜치만 사용하게 되었다.
+add-swagger 브랜치만 사용하게 되었다.
 
 # ERD
 ![Copy of abandoned animals (1)](https://github.com/user-attachments/assets/119317aa-d912-43fb-8b38-d056249aa28f)
