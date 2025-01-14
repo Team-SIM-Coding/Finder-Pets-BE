@@ -53,7 +53,8 @@
 add-swagger 브랜치만 사용하게 되었다.
 
 # ERD
-![Copy of abandoned animals (1)](https://github.com/user-attachments/assets/119317aa-d912-43fb-8b38-d056249aa28f)
+![finderpets](https://github.com/user-attachments/assets/994235b4-f615-473c-ad4f-27931d015343)
+
 
 
 # Architecture
