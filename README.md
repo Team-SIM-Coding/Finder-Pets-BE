@@ -53,7 +53,7 @@
 add-swagger 브랜치만 사용하게 되었다.
 
 # ERD
-![finderpets](https://github.com/user-attachments/assets/994235b4-f615-473c-ad4f-27931d015343)
+![finderpets](https://github.com/user-attachments/assets/231c5afb-f7be-47cb-b23a-cd9bd51d6fa7)
 
 
 
